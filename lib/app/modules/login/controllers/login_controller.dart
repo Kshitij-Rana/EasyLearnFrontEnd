@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:e_learn/app/routes/app_pages.dart';
-import 'package:e_learn/constants.dart';
+import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -109,7 +109,7 @@ class LoginController extends GetxController {
             } else {
               Get.showSnackbar(GetSnackBar(
                 backgroundColor: Colors.red,
-                message: 'Something went wrong',
+                message: result['message'],
                 duration: const Duration(seconds: 3),
               ));
             }

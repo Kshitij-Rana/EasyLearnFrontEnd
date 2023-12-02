@@ -1,6 +1,6 @@
 import 'package:e_learn/app/customs/custom_body.dart';
 import 'package:e_learn/app/utils/colors.dart';
-import 'package:e_learn/constants.dart';
+import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';

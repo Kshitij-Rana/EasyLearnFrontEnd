@@ -1,11 +1,11 @@
 import 'package:e_learn/app/utils/Assets.dart';
 import 'package:e_learn/app/utils/colors.dart';
-import 'package:e_learn/constants.dart';
+import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'package:sizer/sizer.dart';
 
-class CustomButton extends StatelessWidget {
+class CustomButton extends StatefulWidget {
   final String title;
   final Widget? icon;
   final bool isOutline;
@@ -27,13 +27,21 @@ class CustomButton extends StatelessWidget {
   });
 
   @override
+  State<CustomButton> createState() => _CustomButtonState();
+}
+
+class _CustomButtonState extends State<CustomButton> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: !isTablet() ? 100.w : 70.w,
       height: isTablet() ? 14.w : 6.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(2.w),
-        gradient: (color != null || isOutline || isLight || isDisabled)
+        gradient: (widget.color != null ||
+                widget.isOutline ||
+                widget.isLight ||
+                widget.isDisabled)
             ? null
             : LinearGradient(
                 begin: Alignment.centerLeft,
@@ -43,9 +51,9 @@ class CustomButton extends StatelessWidget {
                   buttonColor.withOpacity(0.7),
                 ],
               ),
-        color: isDisabled
+        color: widget.isDisabled
             ? secondaryTextColor.withOpacity(0.3)
-            : isLight
+            : widget.isLight
                 ? buttonColor
                 : Colors.white,
         boxShadow: [
@@ -62,27 +70,29 @@ class CustomButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(2.w),
         child: InkWell(
           borderRadius: BorderRadius.circular(2.w),
-          onTap: isDisabled ? null : onPressed,
+          onTap: widget.isDisabled ? null : widget.onPressed,
           splashColor: Colors.white24, // Set splash color to transparent
           highlightColor: backgroundColor.withOpacity(0.3), // Highlight color
           child: Center(
-            child: isLoading
+            child: widget.isLoading
                 ? CircularProgressIndicator(
-                    color: isOutline ? primaryColor : Colors.white,
+                    color: widget.isOutline ? primaryColor : Colors.white,
                     strokeWidth: 0.75.w,
                   )
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      icon ?? const SizedBox.shrink(),
-                      icon == null ? Gap() : Gap(width: 5.w),
+                      widget.icon ?? const SizedBox.shrink(),
+                      widget.icon == null ? Gap() : Gap(width: 5.w),
                       Text(
-                        title,
+                        widget.title,
                         style: TextStyle(
-                          color: isOutline ? primaryTextColor : Colors.white,
+                          color: widget.isOutline
+                              ? primaryTextColor
+                              : Colors.white,
                           // fontFamily: Assets.jakartaFont,
-                          fontSize: isOutline ? 12.5.sp : 15.sp,
+                          fontSize: widget.isOutline ? 12.5.sp : 15.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
