@@ -50,12 +50,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.title ?? '',
-          style: TextStyle(
-            fontSize: isTablet() ? 10.sp : 13.sp,
-            fontWeight: FontWeight.w400,
-            color: primaryTextColor,
+        Padding(
+          padding: EdgeInsets.only(left: 1.w),
+          child: Text(
+            widget.title ?? '',
+            style: TextStyle(
+              fontSize: isTablet() ? 10.sp : 13.sp,
+              fontWeight: FontWeight.w500,
+              color: primaryTextColor.withOpacity(0.85),
+            ),
           ),
         ),
         Gap(height: 1.h),
@@ -95,7 +98,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
               width: 0.3.w,
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withOpacity(0.7),
             )),
 
             errorStyle: TextStyle(

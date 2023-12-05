@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/OTP/bindings/otp_binding.dart';
+import '../modules/OTP/views/otp_view.dart';
 import '../modules/admin_category/bindings/admin_category_binding.dart';
 import '../modules/admin_category/views/admin_category_view.dart';
 import '../modules/admin_home/bindings/admin_home_binding.dart';
@@ -20,8 +22,14 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/myLearning/bindings/my_learning_binding.dart';
 import '../modules/myLearning/views/my_learning_view.dart';
+import '../modules/new_password/bindings/new_password_binding.dart';
+import '../modules/new_password/views/new_password_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
+import '../modules/personalInformation/bindings/personal_information_binding.dart';
+import '../modules/personalInformation/bindings/personal_information_binding.dart';
+import '../modules/personalInformation/views/personal_information_view.dart';
+import '../modules/personalInformation/views/personal_information_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/register/bindings/register_binding.dart';
@@ -113,6 +121,28 @@ class AppPages {
       name: _Paths.ADMIN_PRODUCT,
       page: () => const AdminProductView(),
       binding: AdminProductBinding(),
+    ),
+    GetPage(
+      name: _Paths.PERSONAL_INFORMATION,
+      page: () => const PersonalInformationView(),
+      binding: PersonalInformationBinding(),
+      children: [
+        GetPage(
+          name: _Paths.PERSONAL_INFORMATION,
+          page: () => const PersonalInformationView(),
+          binding: PersonalInformationBinding(),
+        ),
+      ],
+    ),
+    GetPage(
+      name: _Paths.NEW_PASSWORD,
+      page: () => const NewPasswordView(),
+      binding: NewPasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.OTP,
+      page: () => const OtpView(),
+      binding: OtpBinding(),
     ),
   ];
 }

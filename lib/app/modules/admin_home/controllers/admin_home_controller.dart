@@ -55,7 +55,6 @@ class AdminHomeController extends GetxController {
 
       if (result['success']) {}
     } catch (e) {
-      print(e);
       Get.showSnackbar(const GetSnackBar(
         backgroundColor: Colors.red,
         message: 'Something went wrong',

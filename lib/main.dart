@@ -12,7 +12,6 @@ void main() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   var token = prefs.getString('token');
   var role = prefs.getString('role');
-  print(role);
   runApp(
     Sizer(
       builder: (context, orientation, deviceType) => GetMaterialApp(
@@ -20,7 +19,7 @@ void main() async {
         debugShowCheckedModeBanner: false,
         initialRoute: token != null
             ? (role != null && role == 'admin')
-                ? Routes.ADMIN_MAIN
+                ? Routes.HOME
                 : Routes.HOME
             : Routes.LOGIN,
         getPages: AppPages.routes,

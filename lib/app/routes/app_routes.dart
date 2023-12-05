@@ -19,6 +19,9 @@ abstract class Routes {
   static const ADMIN_HOME = _Paths.ADMIN_HOME;
   static const ADMIN_CATEGORY = _Paths.ADMIN_CATEGORY;
   static const ADMIN_PRODUCT = _Paths.ADMIN_PRODUCT;
+  static const PERSONAL_INFORMATION = _Paths.PERSONAL_INFORMATION;
+  static const NEW_PASSWORD = _Paths.NEW_PASSWORD;
+  static const OTP = _Paths.OTP;
 }
 
 abstract class _Paths {
@@ -39,4 +42,7 @@ abstract class _Paths {
   static const ADMIN_HOME = '/admin-home';
   static const ADMIN_CATEGORY = '/admin-category';
   static const ADMIN_PRODUCT = '/admin-product';
+  static const PERSONAL_INFORMATION = '/personal-information';
+  static const NEW_PASSWORD = '/new-password';
+  static const OTP = '/otp';
 }

@@ -1,5 +1,5 @@
 import 'package:e_learn/app/customs/custom_body.dart';
-import 'package:e_learn/app/customs/custom_button.dart';
+import 'package:e_learn/app/routes/app_pages.dart';
 import 'package:e_learn/app/utils/Assets.dart';
 import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +31,9 @@ class ProfileView extends GetView<ProfileController> {
           Gap(height: 7.w),
           AccountButton(
               title: "Personal Information",
-              onpressed: () {},
+              onpressed: () {
+                Get.toNamed(Routes.PERSONAL_INFORMATION);
+              },
               iconFront: Icons.person),
           Gap(height: 3.w),
           AccountButton(
