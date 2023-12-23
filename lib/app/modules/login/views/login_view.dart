@@ -48,7 +48,7 @@ class LoginView extends GetView<LoginController> {
                   return null;
                 },
               ),
-              Gap(height: 3.h),
+              Gap(height: 3.w),
               CustomTextField(
                 title: "Password",
                 isPassword: true,
@@ -64,14 +64,14 @@ class LoginView extends GetView<LoginController> {
                   return null;
                 },
               ),
-              Gap(height: 4.h),
+              Gap(height: 4.w),
               CustomButton(
                 title: "Log In",
                 onPressed: () {
                   controller.login();
                 },
               ),
-              Gap(height: 2.h),
+              Gap(height: 3.w),
               GestureDetector(
                 onTap: () {
                   Get.toNamed(Routes.FORGET_PASSWORD);
@@ -81,7 +81,7 @@ class LoginView extends GetView<LoginController> {
                   style: TextStyle(color: buttonColor, fontSize: 13.5.sp),
                 ),
               ),
-              Gap(height: 5.h),
+              Gap(height: 5.w),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

@@ -19,7 +19,7 @@ void main() async {
         debugShowCheckedModeBanner: false,
         initialRoute: token != null
             ? (role != null && role == 'admin')
-                ? Routes.HOME
+                ? Routes.ADMIN_MAIN
                 : Routes.HOME
             : Routes.LOGIN,
         getPages: AppPages.routes,

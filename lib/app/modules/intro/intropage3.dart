@@ -36,6 +36,5 @@ class _Intropage3State extends State<Intropage3> {
         ],
       ),
     );
-    ;
   }
 }

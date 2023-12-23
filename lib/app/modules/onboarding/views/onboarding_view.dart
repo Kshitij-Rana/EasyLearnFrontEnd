@@ -1,5 +1,3 @@
-import 'package:e_learn/app/routes/app_pages.dart';
-import 'package:e_learn/app/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
@@ -27,7 +25,7 @@ class OnboardingView extends GetView<OnboardingController> {
         ),
         Obx(
           () => Container(
-            alignment: Alignment(0, 0.75),
+            alignment: const Alignment(0, 0.75),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -45,7 +43,7 @@ class OnboardingView extends GetView<OnboardingController> {
                     )),
                 // Dots Indicator
                 SmoothPageIndicator(
-                    effect: ExpandingDotsEffect(
+                    effect: const ExpandingDotsEffect(
                       activeDotColor: Colors.deepPurple,
                     ),
                     controller: controller.pageController,
@@ -53,7 +51,7 @@ class OnboardingView extends GetView<OnboardingController> {
 
                 // Next and done
                 controller.onLastPage.value
-                    ? SizedBox(
+                    ? const SizedBox(
                         width: 35,
                       )
                     // GestureDetector(
@@ -89,7 +87,7 @@ class OnboardingView extends GetView<OnboardingController> {
             top: 5.h,
             right: 5.w,
             child: controller.onLastPage.value
-                ? SizedBox()
+                ? const SizedBox()
                 : GestureDetector(
                     onTap: () {
                       controller.pageController

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:e_learn/app/modules/homepage/controllers/homepage_controller.dart';
 import 'package:e_learn/components/addCategoryPopup.dart';
 import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminHomeController extends GetxController {
-  //TODO: Implement AdminHomeController
   late final SharedPreferences prefs;
   //for adding category
   GlobalKey<FormState> categoryFormKey = GlobalKey<FormState>();
@@ -21,6 +21,7 @@ class AdminHomeController extends GetxController {
   TextEditingController coursePriceController = TextEditingController();
   TextEditingController courseDescriptionController = TextEditingController();
   var selectedCategory = "".obs;
+  var picker = ImagePicker();
 
 //Image picking
   var imagebytes = Uint8List(0);
@@ -31,19 +32,28 @@ class AdminHomeController extends GetxController {
   var stats;
   @override
   void onInit() async {
+    Get.find<HomepageController>().getCategory();
     prefs = await SharedPreferences.getInstance();
+    update();
 
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
+  void pickImage() async {
+    try {
+      image = await picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        imagebytes = await image!.readAsBytes();
+      }
+      update();
+    } catch (e) {
+      Get.showSnackbar(
+        const GetSnackBar(
+          message: "Image upload failed",
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   void getStats() async {
@@ -66,15 +76,14 @@ class AdminHomeController extends GetxController {
   void onAddCategory() {
     showDialog(
       context: Get.context!,
-      builder: (context) => AddCategoryPopup(),
+      builder: (context) => const AddCategoryPopup(),
     );
   }
 
   void addCategory() async {
     addingCategoryLoading.value = true;
-    print(addingCategoryLoading);
     try {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
 
       if (categoryFormKey.currentState!.validate()) {
         var url = Uri.http(ipaddress, "finalyearproject_api/addCategory.php");
@@ -84,8 +93,6 @@ class AdminHomeController extends GetxController {
         });
         var result = jsonDecode(response.body);
         if (result['success']) {
-          print(addingCategoryLoading);
-
           Get.showSnackbar(GetSnackBar(
             backgroundColor: Colors.green,
             message: result['message'],
@@ -99,10 +106,10 @@ class AdminHomeController extends GetxController {
           ));
         }
       } else {
-        Get.showSnackbar(GetSnackBar(
+        Get.showSnackbar(const GetSnackBar(
           backgroundColor: Colors.red,
           message: "Enter Category Title",
-          duration: const Duration(seconds: 3),
+          duration: Duration(seconds: 3),
         ));
       }
     } catch (e) {
@@ -110,7 +117,6 @@ class AdminHomeController extends GetxController {
     } finally {
       addingCategoryLoading.value = false;
     }
-    print(addingCategoryLoading);
   }
 
   void addProduct() async {
@@ -131,25 +137,25 @@ class AdminHomeController extends GetxController {
           Get.showSnackbar(GetSnackBar(
             message: data['message'],
             backgroundColor: Colors.green,
-            duration: Duration(seconds: 3),
+            duration: const Duration(seconds: 3),
           ));
         } else {
           Get.showSnackbar(GetSnackBar(
             message: data['message'],
             backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
+            duration: const Duration(seconds: 3),
           ));
         }
       } else {
-        Get.showSnackbar(GetSnackBar(
+        Get.showSnackbar(const GetSnackBar(
           message: "Fill all the fields",
           backgroundColor: Colors.red,
           duration: Duration(seconds: 3),
         ));
       }
     } catch (e) {
-      Get.showSnackbar(GetSnackBar(
-        message: "Something went wrong",
+      Get.showSnackbar(const GetSnackBar(
+        message: "Something went wrong hai",
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
       ));

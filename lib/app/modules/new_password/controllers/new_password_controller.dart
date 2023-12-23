@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:e_learn/app/routes/app_pages.dart';
 import 'package:e_learn/components/constants.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +12,7 @@ class NewPasswordController extends GetxController {
   //TODO: Implement NewPasswordController
   GlobalKey<FormState> newpasswordFormKey = GlobalKey<FormState>();
   TextEditingController newpasswordController = TextEditingController();
+  TextEditingController confirmpasswordController = TextEditingController();
 
   final count = 0.obs;
   SharedPreferences? prefs;
@@ -22,23 +22,13 @@ class NewPasswordController extends GetxController {
     prefs = await SharedPreferences.getInstance();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   void increment() => count.value++;
   void onNewPasswordclicked() async {
     if (newpasswordFormKey.currentState!.validate()) {
       var url = Uri.http(ipaddress, 'finalyearproject_api/resetPassword.php');
       var response = await http.post(url, body: {
         'new_password': newpasswordController.text,
-        'token': prefs!.getString('token'),
+        'userId': prefs!.getString('userId'),
       });
       if (response.body.isNotEmpty) {
         var result = jsonDecode(response.body);
@@ -48,7 +38,7 @@ class NewPasswordController extends GetxController {
             message: result['message'],
             duration: const Duration(seconds: 3),
           ));
-          Get.toNamed(Routes.LOGIN);
+          Get.offAllNamed(Routes.LOGIN);
         } else {
           Get.showSnackbar(GetSnackBar(
             backgroundColor: Colors.red,

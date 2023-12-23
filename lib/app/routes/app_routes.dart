@@ -22,6 +22,9 @@ abstract class Routes {
   static const PERSONAL_INFORMATION = _Paths.PERSONAL_INFORMATION;
   static const NEW_PASSWORD = _Paths.NEW_PASSWORD;
   static const OTP = _Paths.OTP;
+  static const ADD_PRODUCT = _Paths.ADD_PRODUCT;
+  static const ADD_COURSE_CONTENT = _Paths.ADD_COURSE_CONTENT;
+  static const COURSECONTENT = _Paths.COURSECONTENT;
 }
 
 abstract class _Paths {
@@ -45,4 +48,7 @@ abstract class _Paths {
   static const PERSONAL_INFORMATION = '/personal-information';
   static const NEW_PASSWORD = '/new-password';
   static const OTP = '/otp';
+  static const ADD_PRODUCT = '/add-product';
+  static const ADD_COURSE_CONTENT = '/add-course-content';
+  static const COURSECONTENT = '/coursecontent';
 }

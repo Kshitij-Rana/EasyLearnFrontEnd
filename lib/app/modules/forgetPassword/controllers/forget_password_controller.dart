@@ -9,37 +9,43 @@ import 'package:http/http.dart' as http;
 class ForgetPasswordController extends GetxController {
   var forgotPasswordKey = GlobalKey<FormState>();
   TextEditingController forgotEmailController = TextEditingController();
-  //TODO: Implement ForgetPasswordController
-
+  var isLoading = false.obs;
   final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   void increment() => count.value++;
   void onFindProfileClicked() async {
-    var url = Uri.http(ipaddress, 'finalyearproject_api/forgotPassword.php');
-    var response =
-        await http.post(url, body: {'email': forgotEmailController.text});
-    if (response.body.isNotEmpty) {
-      var result = jsonDecode(response.body);
-      Get.toNamed(Routes.OTP);
-      Get.showSnackbar(GetSnackBar(
-        backgroundColor: Colors.green,
-        message: result['message'],
-        duration: const Duration(seconds: 3),
-      ));
+    isLoading.value = true;
+    if (forgotPasswordKey.currentState!.validate()) {
+      try {
+        var url =
+            Uri.http(ipaddress, 'finalyearproject_api/forrgetPassword.php');
+        var response =
+            await http.post(url, body: {'email': forgotEmailController.text});
+        var result = jsonDecode(response.body);
+
+        if (result['success']) {
+          Get.toNamed(Routes.OTP);
+          Get.showSnackbar(GetSnackBar(
+            backgroundColor: Colors.green,
+            message: result['message'],
+            duration: const Duration(seconds: 3),
+          ));
+        } else {
+          Get.showSnackbar(GetSnackBar(
+            backgroundColor: Colors.red,
+            message: result['message'],
+            duration: const Duration(seconds: 3),
+          ));
+        }
+      } catch (e) {
+        Get.showSnackbar(const GetSnackBar(
+          backgroundColor: Colors.red,
+          message: "Something went worng in api",
+          duration: Duration(seconds: 3),
+        ));
+      }
     }
+
+    isLoading.value = false;
   }
 }

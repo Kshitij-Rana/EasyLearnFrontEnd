@@ -28,11 +28,11 @@ class _YourCustomBottomNavigationState extends State<YourCustomBottomNavigation>
   @override
   Widget build(BuildContext context) {
     return ScaffoldGlobalBottomNavigation(
-      listOfChild: [
-        const HomepageView(),
-        const SearchpageView(),
-        const MyLearningView(),
-        const ProfileView(),
+      listOfChild: const [
+        HomepageView(),
+        SearchpageView(),
+        MyLearningView(),
+        ProfileView(),
       ],
       listOfBottomNavigationItem: buildBottomNavigationItemList(),
     );

@@ -37,7 +37,7 @@ class ProfileView extends GetView<ProfileController> {
               iconFront: Icons.person),
           Gap(height: 3.w),
           AccountButton(
-              title: "Additional Information",
+              title: "Want to be a tutor?",
               onpressed: () {},
               iconFront: Icons.person_add_alt_rounded),
           Gap(height: 3.w),

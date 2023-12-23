@@ -1,9 +1,7 @@
 import 'package:e_learn/app/customs/customTextField.dart';
 import 'package:e_learn/app/customs/custom_body.dart';
 import 'package:e_learn/app/customs/custom_button.dart';
-import 'package:e_learn/app/utils/Assets.dart';
 import 'package:e_learn/app/utils/colors.dart';
-import 'package:e_learn/app/views/views/modal_bottom_sheet_personal_infromation_view.dart';
 import 'package:e_learn/components/constants.dart';
 import 'package:e_learn/components/modalbottomsheetPersonalInformation.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +18,7 @@ class PersonalInformationView extends GetView<PersonalInformationController> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: buttonColor.withOpacity(0.8),
-          title: Text(
+          title: const Text(
             'Personal Information',
             style: TextStyle(color: Colors.white),
           ),
@@ -51,7 +49,7 @@ class PersonalInformationView extends GetView<PersonalInformationController> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12)),
                                 context: context,
-                                builder: (context) => ModalBottomSheet());
+                                builder: (context) => const ModalBottomSheet());
                           },
                           child: controller.imagebytes.isEmpty
                               ? CircleAvatar(

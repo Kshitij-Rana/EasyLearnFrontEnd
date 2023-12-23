@@ -55,13 +55,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
           child: Text(
             widget.title ?? '',
             style: TextStyle(
-              fontSize: isTablet() ? 10.sp : 13.sp,
+              fontSize: isTablet() ? 10.sp : 11.sp,
               fontWeight: FontWeight.w500,
-              color: primaryTextColor.withOpacity(0.85),
+              color: primaryTextColor.withOpacity(0.7),
             ),
           ),
         ),
-        Gap(height: 1.h),
+        Gap(height: 1.w),
         TextFormField(
           onTapOutside: (event) {
             FocusScope.of(context).unfocus();

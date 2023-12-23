@@ -17,8 +17,8 @@ class StatsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(5),
-      decoration: BoxDecoration(boxShadow: [
+      margin: const EdgeInsets.all(5),
+      decoration: BoxDecoration(boxShadow: const [
         BoxShadow(
           spreadRadius: 2,
           color: Colors.black12,
@@ -30,18 +30,18 @@ class StatsCard extends StatelessWidget {
         children: [
           Text(
             (isAmount ? 'Rs.' : '') + value,
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 label,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 5,
               ),
               icon ?? const SizedBox.shrink(),

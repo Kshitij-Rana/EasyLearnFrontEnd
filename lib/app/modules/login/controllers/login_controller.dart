@@ -21,16 +21,6 @@ class LoginController extends GetxController {
     prefs = await SharedPreferences.getInstance();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   // Future<void> login() async {
   //   if (loginKey.currentState!.validate()) {
   //     try {
@@ -81,16 +71,13 @@ class LoginController extends GetxController {
     if (loginKey.currentState!.validate()) {
       try {
         var url = Uri.http(ipaddress, 'finalyearproject_api/auth/login.php');
-        print(url);
         var response = await http.post(url, body: {
           'email': emailController.text,
           'password': passController.text
         });
-        print(response);
         if (response.statusCode == 200) {
           if (response.body.isNotEmpty) {
             var result = jsonDecode(response.body);
-            print(response.body);
             if (result['success']) {
               await prefs!.setString('role', result['role']);
               await prefs!.setString('token', result['token']);
@@ -115,10 +102,10 @@ class LoginController extends GetxController {
             }
           } else {
             // Handle empty response body
-            Get.showSnackbar(GetSnackBar(
+            Get.showSnackbar(const GetSnackBar(
               backgroundColor: Colors.red,
               message: 'Empty response body',
-              duration: const Duration(seconds: 3),
+              duration: Duration(seconds: 3),
             ));
           }
         } else {
@@ -131,7 +118,6 @@ class LoginController extends GetxController {
         }
       } catch (e) {
         // Handle exceptions (e.g., network issues)
-        print('Error: $e');
         Get.showSnackbar(GetSnackBar(
           backgroundColor: Colors.red,
           message: 'An error occurred: $e',

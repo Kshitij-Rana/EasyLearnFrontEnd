@@ -120,7 +120,7 @@ class SignupView extends GetView<SignupController> {
                     CustomTextField(
                       isPassword: true,
                       hintText: "confirm password",
-                      controller: controller.passwordController,
+                      controller: controller.confirmPasswordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Please enter password";

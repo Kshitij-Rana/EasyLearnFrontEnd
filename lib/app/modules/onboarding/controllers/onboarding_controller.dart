@@ -7,17 +7,18 @@ import 'package:get/get.dart';
 
 class OnboardingController extends GetxController {
   //TODO: Implement OnboardingController
-  List<Widget> pages = [Intropage1(), Intropage2(), Intropage3(), Intropage5()];
+  List<Widget> pages = [
+    const Intropage1(),
+    const Intropage2(),
+    const Intropage3(),
+    const Intropage5()
+  ];
   final count = 0.obs;
   // to keep track of pages
   var currentIndex = 0.obs;
   PageController pageController = PageController();
   // To keep track if we are on the last page or not
   RxBool onLastPage = false.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   void nextPage() {
     pageController.nextPage(
@@ -27,16 +28,6 @@ class OnboardingController extends GetxController {
   void backpage() {
     pageController.previousPage(
         duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   void increment() => count.value++;

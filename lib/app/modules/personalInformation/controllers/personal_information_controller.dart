@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:e_learn/components/constants.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -30,16 +29,6 @@ class PersonalInformationController extends GetxController {
     prefs = await SharedPreferences.getInstance();
 
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   void pickImage() async {
@@ -94,23 +83,20 @@ class PersonalInformationController extends GetxController {
         form.files.add(http.MultipartFile.fromBytes('image', imagebytes,
             filename: image!.name));
         var response = await http.Response.fromStream(await form.send());
-        print(response);
         var result = jsonDecode(response.body);
-        print(result['success']);
-        print(url);
 
         if (result['success']) {
           update();
           Get.showSnackbar(GetSnackBar(
             backgroundColor: Colors.green,
             message: result['message'],
-            duration: Duration(seconds: 3),
+            duration: const Duration(seconds: 3),
           ));
         } else {
           Get.showSnackbar(GetSnackBar(
             backgroundColor: Colors.red,
             message: result['message'],
-            duration: Duration(seconds: 3),
+            duration: const Duration(seconds: 3),
           ));
         }
       } else {
@@ -121,7 +107,6 @@ class PersonalInformationController extends GetxController {
         ));
       }
     } catch (e) {
-      print(e);
       Get.showSnackbar(const GetSnackBar(
         backgroundColor: Colors.red,
         message: 'Something went wrong',

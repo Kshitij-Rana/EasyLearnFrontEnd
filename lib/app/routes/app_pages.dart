@@ -2,6 +2,10 @@ import 'package:get/get.dart';
 
 import '../modules/OTP/bindings/otp_binding.dart';
 import '../modules/OTP/views/otp_view.dart';
+import '../modules/addCourseContent/bindings/add_course_content_binding.dart';
+import '../modules/addCourseContent/views/add_course_content_view.dart';
+import '../modules/addProduct/bindings/add_product_binding.dart';
+import '../modules/addProduct/views/add_product_view.dart';
 import '../modules/admin_category/bindings/admin_category_binding.dart';
 import '../modules/admin_category/views/admin_category_view.dart';
 import '../modules/admin_home/bindings/admin_home_binding.dart';
@@ -12,6 +16,8 @@ import '../modules/admin_product/bindings/admin_product_binding.dart';
 import '../modules/admin_product/views/admin_product_view.dart';
 import '../modules/cart/bindings/cart_binding.dart';
 import '../modules/cart/views/cart_view.dart';
+import '../modules/coursecontent/bindings/coursecontent_binding.dart';
+import '../modules/coursecontent/views/coursecontent_view.dart';
 import '../modules/forgetPassword/bindings/forget_password_binding.dart';
 import '../modules/forgetPassword/views/forget_password_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -27,8 +33,6 @@ import '../modules/new_password/views/new_password_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/personalInformation/bindings/personal_information_binding.dart';
-import '../modules/personalInformation/bindings/personal_information_binding.dart';
-import '../modules/personalInformation/views/personal_information_view.dart';
 import '../modules/personalInformation/views/personal_information_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
@@ -143,6 +147,21 @@ class AppPages {
       name: _Paths.OTP,
       page: () => const OtpView(),
       binding: OtpBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_PRODUCT,
+      page: () => const AddProductView(),
+      binding: AddProductBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_COURSE_CONTENT,
+      page: () => const AddCourseContentView(),
+      binding: AddCourseContentBinding(),
+    ),
+    GetPage(
+      name: _Paths.COURSECONTENT,
+      page: () => const CoursecontentView(),
+      binding: CoursecontentBinding(),
     ),
   ];
 }

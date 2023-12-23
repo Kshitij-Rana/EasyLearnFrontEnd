@@ -10,6 +10,10 @@ bool isTablet() {
   }
 }
 
+var getImageUrl = (images) {
+  return 'http://$ipaddress/finalyearproject_api/$images';
+};
+
 // ignore: non_constant_identifier_names
 Gap({double? width, double? height}) => SizedBox(
       width: width,
