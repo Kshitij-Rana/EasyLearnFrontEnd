@@ -39,9 +39,14 @@ class OtpController extends GetxController {
         'otp': otpcontroller.text,
         'email': forgetPasswordcontroller.forgotEmailController.text
       });
+      print(otpcontroller.text);
+      print(forgetPasswordcontroller.forgotEmailController.text);
+      print(response.body);
       if (response.body.isNotEmpty) {
         var result = jsonDecode(response.body);
+
         if (result['success']) {
+          print(result['userId']);
           await prefs!.setString('userId', result['userId']);
           Get.showSnackbar(GetSnackBar(
             backgroundColor: Colors.green,

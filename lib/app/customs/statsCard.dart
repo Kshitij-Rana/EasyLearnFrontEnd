@@ -18,28 +18,30 @@ class StatsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(5),
-      decoration: BoxDecoration(boxShadow: const [
-        BoxShadow(
-          spreadRadius: 2,
-          color: Colors.black12,
-          offset: Offset(1, 1),
-        )
-      ], color: color ?? Colors.blue.shade100),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(
+              spreadRadius: 0.5,
+              color: Colors.black12,
+              offset: Offset(0, 2),
+            ),
+          ],
+          color: color ?? Colors.blue.shade100),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             (isAmount ? 'Rs.' : '') + value,
-            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 label,
-                style: const TextStyle(
-                  fontSize: 20,
-                ),
+                style: const TextStyle(fontSize: 20, color: Colors.white),
               ),
               const SizedBox(
                 width: 5,

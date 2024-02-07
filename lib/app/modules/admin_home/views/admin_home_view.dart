@@ -37,58 +37,66 @@ class AdminHomeView extends GetView<AdminHomeController> {
               Gap(height: 4.w),
               Container(
                 height: 80.h,
-                margin: const EdgeInsets.all(10),
+                // margin: const EdgeInsets.all(10),
                 child: GridView(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      mainAxisSpacing: 5,
-                      crossAxisSpacing: 5),
+                      mainAxisSpacing: 15,
+                      crossAxisSpacing: 15),
                   children: [
                     const StatsCard(
-                        label: "Total Users",
-                        value: "3",
-                        icon: Icon(Icons.people)),
+                      color: Color(0xffDCBFFF),
+                      label: "Total Users",
+                      value: "3",
+                      icon: Icon(Icons.people, color: Colors.white),
+                    ),
                     const StatsCard(
+                        color: Color(0xffDCBFFF),
                         label: "Total Courses",
                         value: "4",
-                        icon: Icon(Icons.menu_book_rounded)),
+                        icon:
+                            Icon(Icons.menu_book_rounded, color: Colors.white)),
                     const StatsCard(
+                        color: Color(0xffDCBFFF),
                         label: "Total Orders",
                         value: "7",
-                        icon: Icon(Icons.production_quantity_limits_rounded)),
+                        icon: Icon(Icons.production_quantity_limits_rounded,
+                            color: Colors.white)),
                     const StatsCard(
+                      color: Color(0xffDCBFFF),
                       isAmount: true,
                       label: "Total Income",
                       value: "3000",
-                      icon: Icon(Icons.attach_money_outlined),
+                      icon: Icon(Icons.attach_money_outlined,
+                          color: Colors.white),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        controller.onAddCategory();
-                      },
-                      child: const StatsCard(
-                          label: "Add Category",
-                          value: "",
-                          icon: Icon(Icons.attach_money_outlined)),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.ADD_PRODUCT);
-                      },
-                      child: const StatsCard(
-                          label: "Add Courses",
-                          value: "",
-                          icon: Icon(Icons.attach_money_outlined)),
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        Get.toNamed(Routes.ADD_COURSE_CONTENT);
-                      },
-                      child: const StatsCard(
-                          label: "Add C.content",
-                          value: "",
-                          icon: Icon(Icons.attach_money_outlined)),
-                    )
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     controller.onAddCategory();
+                    //   },
+                    //   child: const StatsCard(
+                    //       label: "Add Category",
+                    //       value: "",
+                    //       icon: Icon(Icons.attach_money_outlined)),
+                    // ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Get.toNamed(Routes.ADD_PRODUCT);
+                    //   },
+                    //   child: const StatsCard(
+                    //       label: "Add Courses",
+                    //       value: "",
+                    //       icon: Icon(Icons.attach_money_outlined)),
+                    // ),
+                    // GestureDetector(
+                    //   onTap: () async {
+                    //     Get.toNamed(Routes.ADD_COURSE_CONTENT);
+                    //   },
+                    //   child: const StatsCard(
+                    //       label: "Add C.content",
+                    //       value: "",
+                    //       icon: Icon(Icons.attach_money_outlined)),
+                    // )
                   ],
                 ),
               ),

@@ -3,7 +3,6 @@ import 'package:e_learn/app/customs/custom_body.dart';
 import 'package:e_learn/app/customs/custom_button.dart';
 import 'package:e_learn/app/utils/colors.dart';
 import 'package:e_learn/components/constants.dart';
-import 'package:e_learn/components/modalbottomsheetPersonalInformation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -40,53 +39,207 @@ class PersonalInformationView extends GetView<PersonalInformationController> {
               key: controller.personalInformationKey,
               child: Column(
                 children: [
-                  Stack(
-                    children: [
-                      Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            showModalBottomSheet(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)),
-                                context: context,
-                                builder: (context) => const ModalBottomSheet());
-                          },
-                          child: controller.imagebytes.isEmpty
-                              ? CircleAvatar(
-                                  maxRadius: 95,
-                                  backgroundColor: Colors.grey.shade400,
-                                  child: const CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      maxRadius: 90,
-                                      backgroundImage: AssetImage(
-                                          'assets/images/profile.jpeg')),
-                                )
-                              : CircleAvatar(
-                                  maxRadius: 95,
-                                  backgroundColor: buttonColor.withOpacity(0.5),
-                                  child: CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      maxRadius: 90,
-                                      backgroundImage:
-                                          MemoryImage(controller.imagebytes)),
+                  Obx(
+                    () => Stack(
+                      children: [
+                        // Center(
+                        //   child: GestureDetector(
+                        //     onTap: () {
+                        //       showModalBottomSheet(
+                        //           shape: RoundedRectangleBorder(
+                        //               borderRadius: BorderRadius.circular(12)),
+                        //           context: context,
+                        //           builder: (context) => const ModalBottomSheet());
+                        //     },
+                        //     child: controller.url == ''
+                        //         ? CircleAvatar(
+                        //             maxRadius: 95,
+                        //             backgroundColor: buttonColor.withOpacity(0.5),
+                        //             child: CircleAvatar(
+                        //                 backgroundColor: Colors.white,
+                        //                 maxRadius: 90,
+                        //                 backgroundImage:
+                        //                     MemoryImage(controller.imagebytes)),
+                        //           )
+                        //         : controller.imagebytes.isEmpty
+                        //             ? CircleAvatar(
+                        //                 maxRadius: 95,
+                        //                 backgroundColor: Colors.grey.shade400,
+                        //                 child: const CircleAvatar(
+                        //                     backgroundColor: Colors.white,
+                        //                     maxRadius: 90,
+                        //                     backgroundImage: AssetImage(
+                        //                         'assets/images/profile.jpeg')),
+                        //               )
+                        //             : CircleAvatar(
+                        //                 maxRadius: 95,
+                        //                 backgroundColor:
+                        //                     buttonColor.withOpacity(0.5),
+                        //                 child: CircleAvatar(
+                        //                     backgroundColor: Colors.white,
+                        //                     maxRadius: 90,
+                        //                     backgroundImage: NetworkImage(
+                        //                         getImageUrl(controller.url))),
+                        //               ),
+                        //   ),
+                        // ),
+                        controller.imagebytes.value.isEmpty
+                            ? Center(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12)),
+                                      context: context,
+                                      builder: (context) => Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 2.w, horizontal: 5.w),
+                                        width: 100.w,
+                                        height: 31.5.w,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(3.w),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Gap(height: 2.w),
+                                            SizedBox(
+                                              height: 12.w,
+                                              child: TextButton(
+                                                style: TextButton.styleFrom(
+                                                    foregroundColor:
+                                                        Colors.grey),
+                                                onPressed: () {
+                                                  FocusScope.of(context)
+                                                      .unfocus();
+                                                  controller.pickImage();
+                                                },
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.photo,
+                                                      color: Colors.black,
+                                                      size: 18.sp,
+                                                    ),
+                                                    Gap(width: 6.w),
+                                                    SizedBox(
+                                                      width: 55.w,
+                                                      child: Text(
+                                                        "Choose from gallery",
+                                                        style: TextStyle(
+                                                            fontSize: 12.sp,
+                                                            color:
+                                                                primaryTextColor),
+                                                      ),
+                                                    ),
+                                                    Gap(width: 6.w),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 12.w,
+                                              child: TextButton(
+                                                style: TextButton.styleFrom(
+                                                    foregroundColor:
+                                                        Colors.grey),
+                                                onPressed: () {
+                                                  FocusScope.of(context)
+                                                      .unfocus();
+
+                                                  controller.pickImageCamera();
+                                                },
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.camera_alt_rounded,
+                                                      color: Colors.black,
+                                                      size: 18.sp,
+                                                    ),
+                                                    Gap(width: 6.w),
+                                                    SizedBox(
+                                                      width: 55.w,
+                                                      child: Text(
+                                                        "Take a Photo",
+                                                        style: TextStyle(
+                                                            fontSize: 12.sp,
+                                                            color:
+                                                                primaryTextColor),
+                                                      ),
+                                                    ),
+                                                    Gap(width: 6.w),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                    // controller.pickImage();
+                                  },
+                                  child: controller.url.value == ""
+                                      ? const CircleAvatar(
+                                          maxRadius: 95,
+                                          backgroundColor: Colors.white,
+                                          child: CircleAvatar(
+                                              backgroundColor: Colors.white,
+                                              maxRadius: 90,
+                                              backgroundImage: AssetImage(
+                                                  'assets/images/profile.jpeg')),
+                                        )
+                                      : CircleAvatar(
+                                          backgroundColor:
+                                              Colors.deepPurple.shade300,
+                                          maxRadius: 95,
+                                          child: CircleAvatar(
+                                              backgroundColor: Colors.white,
+                                              maxRadius: 90,
+                                              backgroundImage: NetworkImage(
+                                                  getImageUrl(
+                                                      controller.url.value))),
+                                        ),
                                 ),
-                        ),
-                      ),
-                      Positioned(
-                          bottom: 10,
-                          right: 26.w,
-                          child: CircleAvatar(
-                              backgroundColor: controller.imagebytes.isEmpty
-                                  ? Colors.grey.shade400
-                                  : Colors.deepPurple.shade300,
-                              child: Icon(
-                                Icons.camera_alt,
-                                color: controller.imagebytes.isEmpty
-                                    ? Colors.black
-                                    : Colors.white,
-                                size: 19.sp,
-                              ))),
-                    ],
+                              )
+                            : Center(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    controller.pickImage();
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    maxRadius: 95,
+                                    child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        maxRadius: 90,
+                                        backgroundImage: MemoryImage(
+                                            controller.imagebytes.value)),
+                                  ),
+                                ),
+                              ),
+                        Positioned(
+                            bottom: 10,
+                            right: 26.w,
+                            child: CircleAvatar(
+                                backgroundColor:
+                                    controller.imagebytes.value.isEmpty
+                                        ? Colors.grey.shade400
+                                        : Colors.deepPurple.shade300,
+                                child: Icon(
+                                  Icons.camera_alt,
+                                  color: controller.imagebytes.value.isEmpty
+                                      ? Colors.black
+                                      : Colors.white,
+                                  size: 19.sp,
+                                ))),
+                      ],
+                    ),
                   ),
                   Gap(height: 3.w),
                   CustomTextField(

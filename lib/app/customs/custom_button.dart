@@ -41,7 +41,14 @@ class _CustomButtonState extends State<CustomButton> {
                 widget.isOutline ||
                 widget.isLight ||
                 widget.isDisabled)
-            ? null
+            ? LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  widget.color!.withOpacity(1),
+                  widget.color!.withOpacity(1),
+                ],
+              )
             : LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,

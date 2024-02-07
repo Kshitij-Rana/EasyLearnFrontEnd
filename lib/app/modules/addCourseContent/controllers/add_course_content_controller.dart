@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -14,6 +16,9 @@ class AddCourseContentController extends GetxController {
   late VideoPlayerController videoPlayerController;
   Duration? duration;
   Duration? position;
+  Duration? fiveSecBehind;
+  Duration? fiveSecFront;
+
   // late VideoPlayerController videoPlayerController2;
   // late VideoPlayerController videoPlayerController3;
   // late VideoPlayerController videoPlayerController4;
@@ -25,7 +30,10 @@ class AddCourseContentController extends GetxController {
   var videoPlaying = false.obs;
   var isInitialized = false.obs;
   var isLandScape = false.obs;
-
+  var task;
+  String videoUrl = '';
+  final minute = "00".obs;
+  final second = "00".obs;
   final count = 0.obs;
   var picker = ImagePicker();
   //for image
@@ -41,8 +49,21 @@ class AddCourseContentController extends GetxController {
   //   customVideoPlayerController.dispose();
   //   super.dispose();
   // }
+  Timer? timer;
   String convertTwo(int value) {
     return value < 10 ? "0$value" : "$value";
+  }
+
+  void replayfiveSecBehind() {
+    fiveSecBehind =
+        videoPlayerController.value.duration - const Duration(seconds: 5);
+    videoPlayerController.seekTo(fiveSecBehind!);
+  }
+
+  void replayfiveSecFront() {
+    fiveSecFront =
+        videoPlayerController.value.duration + const Duration(seconds: 5);
+    videoPlayerController.seekTo(fiveSecFront!);
   }
 
 //for video players
@@ -84,9 +105,7 @@ class AddCourseContentController extends GetxController {
   }
 
   void oncontrollerUpdate() async {
-    if (duration == null) {
-      duration = videoPlayerController.value.duration;
-    }
+    duration ??= videoPlayerController.value.duration;
     var duration2 = duration;
     if (duration2 == null) return;
     var position1 = await videoPlayerController.position;
@@ -97,6 +116,13 @@ class AddCourseContentController extends GetxController {
           duration2.inMilliseconds.ceilToDouble();
     }
     videoPlaying.value = playing;
+    final durations = duration?.inSeconds ?? 0;
+    final head = position?.inSeconds ?? 0;
+    final remained = durations - head;
+    final mins = convertTwo(remained ~/ 60.0);
+    final secs = convertTwo(remained % 60);
+    minute.value = mins;
+    second.value = secs;
     update();
   }
 
@@ -128,7 +154,7 @@ class AddCourseContentController extends GetxController {
         GetSnackBar(
           message: "Image upload failed:{$e}",
           backgroundColor: Colors.red,
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
         ),
       );
     }
@@ -138,13 +164,21 @@ class AddCourseContentController extends GetxController {
     videoLoading.value = true;
     try {
       video = await picker.pickVideo(source: ImageSource.gallery);
+      if (video == null) {
+        // User cancelled the operation
+        Get.showSnackbar(
+          const GetSnackBar(
+            message: "No video selected",
+            backgroundColor: Colors.orange,
+            duration: Duration(seconds: 3),
+          ),
+        );
+        return;
+      }
       initializeVideo();
       isInitialized.value = true;
-      if (video != null) {
-        videobytes = await video!.readAsBytes();
-
-        update();
-      }
+      videobytes = await video!.readAsBytes();
+      update();
       Get.showSnackbar(
         const GetSnackBar(
           message: "Video uploaded",
@@ -162,6 +196,26 @@ class AddCourseContentController extends GetxController {
       );
     }
     videoLoading.value = false;
+  }
+
+  void onAddCourseContent() async {
+    if (courseFormKey.currentState!.validate()) {
+      try {
+        var url;
+        if (video != null) {
+          final storageref = FirebaseStorage.instance.ref();
+          final videoRef =
+              storageref.child(DateTime.now().toString() + video!.name);
+          task = await videoRef.putFile(
+              File(video!.path), SettableMetadata(contentType: "video/mp4"));
+          videoUrl = await videoRef.getDownloadURL();
+          url = videoUrl;
+        }
+        if (url == null) {}
+      } catch (e) {
+        e;
+      }
+    }
   }
 
   void increment() => count.value++;

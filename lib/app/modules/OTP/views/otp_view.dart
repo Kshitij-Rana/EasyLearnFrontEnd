@@ -87,6 +87,7 @@ class OtpView extends GetView<OtpController> {
                     ),
                     Gap(height: 5.w),
                     Pinput(
+                      controller: controller.otpcontroller,
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.digitsOnly
                       ],

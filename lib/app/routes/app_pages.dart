@@ -18,6 +18,8 @@ import '../modules/cart/bindings/cart_binding.dart';
 import '../modules/cart/views/cart_view.dart';
 import '../modules/coursecontent/bindings/coursecontent_binding.dart';
 import '../modules/coursecontent/views/coursecontent_view.dart';
+import '../modules/edit_category/bindings/edit_category_binding.dart';
+import '../modules/edit_category/views/edit_category_view.dart';
 import '../modules/forgetPassword/bindings/forget_password_binding.dart';
 import '../modules/forgetPassword/views/forget_password_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -162,6 +164,11 @@ class AppPages {
       name: _Paths.COURSECONTENT,
       page: () => const CoursecontentView(),
       binding: CoursecontentBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDIT_CATEGORY,
+      page: () => const EditCategoryView(),
+      binding: EditCategoryBinding(),
     ),
   ];
 }

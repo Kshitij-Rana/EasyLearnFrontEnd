@@ -39,6 +39,7 @@ flutter:
 
   assets:
     - assets/images/profile.png
+    - assets/images/noImage.png
     - assets/images/profile.jpeg
     - assets/lottie/
     - assets/svg/

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:e_learn/app/controller/user_detail_controller.dart';
 import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,8 +19,9 @@ class PersonalInformationController extends GetxController {
   TextEditingController bioController = TextEditingController();
   XFile? image;
   final ImagePicker picker = ImagePicker();
-  var imagebytes = Uint8List(0);
-
+  var imagebytes = Uint8List(0).obs;
+  RxBool isFetched = false.obs;
+  RxString url = ''.obs;
   //for sharedPreferences
   late final SharedPreferences prefs;
 
@@ -27,6 +29,16 @@ class PersonalInformationController extends GetxController {
   @override
   void onInit() async {
     prefs = await SharedPreferences.getInstance();
+    try {
+      var userController = Get.find<UserDetailController>();
+      nameController.text = userController.userInfo?.fullName ?? '';
+      emailController.text = userController.userInfo?.email ?? '';
+      addressController.text = userController.userInfo?.address ?? '';
+      bioController.text = userController.userInfo?.bio ?? '';
+      url.value = userController.userInfo?.profileImg ?? '';
+    } catch (e) {
+      debugPrint("Error:$e");
+    }
 
     super.onInit();
   }
@@ -36,7 +48,7 @@ class PersonalInformationController extends GetxController {
       image = await picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
         Get.back();
-        imagebytes = await image!.readAsBytes();
+        imagebytes.value = await image!.readAsBytes();
       }
       update();
     } catch (e) {
@@ -53,7 +65,7 @@ class PersonalInformationController extends GetxController {
     try {
       image = await picker.pickImage(source: ImageSource.camera);
       if (image != null) {
-        imagebytes = await image!.readAsBytes();
+        imagebytes.value = await image!.readAsBytes();
         update();
         Get.back();
       }
@@ -80,12 +92,13 @@ class PersonalInformationController extends GetxController {
         form.fields['address'] = addressController.text;
         form.fields['bio'] = bioController.text;
 
-        form.files.add(http.MultipartFile.fromBytes('image', imagebytes,
+        form.files.add(http.MultipartFile.fromBytes('image', imagebytes.value,
             filename: image!.name));
         var response = await http.Response.fromStream(await form.send());
         var result = jsonDecode(response.body);
 
         if (result['success']) {
+          Get.find<UserDetailController>().getUserInfo();
           update();
           Get.showSnackbar(GetSnackBar(
             backgroundColor: Colors.green,

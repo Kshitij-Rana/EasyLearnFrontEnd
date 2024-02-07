@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:async';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:e_learn/app/customs/customTextField.dart';
@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-import 'package:video_player/video_player.dart';
 
 import '../controllers/add_course_content_controller.dart';
 
@@ -17,13 +16,6 @@ class AddCourseContentView extends GetView<AddCourseContentController> {
   const AddCourseContentView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final duration = controller.duration?.inSeconds ?? 0;
-    final head = controller.position?.inSeconds ?? 0;
-    final remained = max(0, duration - head);
-    final mins = controller.convertTwo(remained ~/ 60.0); //22 ~/ 7 = 3
-    final secs = controller.convertTwo(remained %
-        60); //22%7= 3.1 (% this symbol gets rid of the front part and return 1)
-
     return Scaffold(
         appBar: AppBar(
           title: const Text('Add Course Content'),
@@ -169,11 +161,12 @@ class AddCourseContentView extends GetView<AddCourseContentController> {
                                                     false;
                                                 controller.videoPlayerController
                                                     .pause();
+                                                controller.timer?.cancel();
                                               },
                                               child: CircleAvatar(
                                                 backgroundColor: Colors.white
                                                     .withOpacity(0.8),
-                                                child: Icon(Icons.pause,
+                                                child: const Icon(Icons.pause,
                                                     color: Colors.black),
                                               ),
                                             )
@@ -184,11 +177,16 @@ class AddCourseContentView extends GetView<AddCourseContentController> {
                                                 controller.videoPlayerController
                                                     .play();
                                                 controller.oncontrollerUpdate();
+                                                controller.timer = Timer.periodic(
+                                                    const Duration(seconds: 1),
+                                                    (Timer t) => controller
+                                                        .oncontrollerUpdate());
                                               },
                                               child: CircleAvatar(
                                                 backgroundColor: Colors.white
                                                     .withOpacity(0.8),
-                                                child: Icon(Icons.play_arrow,
+                                                child: const Icon(
+                                                    Icons.play_arrow,
                                                     color: Colors.black),
                                               ),
                                             ),
@@ -200,9 +198,9 @@ class AddCourseContentView extends GetView<AddCourseContentController> {
                                       () => Row(
                                         children: [
                                           Text(
-                                            "$mins:$secs",
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            "${controller.minute}:${controller.second}",
+                                            style: const TextStyle(
+                                                color: Colors.white),
                                           ),
                                           Gap(width: 3.w),
                                           controller.isMute.value
@@ -214,7 +212,8 @@ class AddCourseContentView extends GetView<AddCourseContentController> {
                                                     controller.isMute.value =
                                                         false;
                                                   },
-                                                  child: Icon(Icons.volume_off,
+                                                  child: const Icon(
+                                                      Icons.volume_off,
                                                       color: Colors.white),
                                                 )
                                               : GestureDetector(
@@ -225,7 +224,8 @@ class AddCourseContentView extends GetView<AddCourseContentController> {
                                                     controller.isMute.value =
                                                         true;
                                                   },
-                                                  child: Icon(Icons.volume_up,
+                                                  child: const Icon(
+                                                      Icons.volume_up,
                                                       color: Colors.white),
                                                 ),
                                           Gap(width: 2.w),
@@ -241,7 +241,7 @@ class AddCourseContentView extends GetView<AddCourseContentController> {
                                                     controller
                                                         .setAllOrientation();
                                                   },
-                                                  child: Icon(
+                                                  child: const Icon(
                                                     Icons.fullscreen_exit,
                                                     color: Colors.white,
                                                   ))
@@ -254,7 +254,7 @@ class AddCourseContentView extends GetView<AddCourseContentController> {
                                                     //     .allowFullscreen;
                                                     controller.setLandscape();
                                                   },
-                                                  child: Icon(
+                                                  child: const Icon(
                                                     Icons.fullscreen,
                                                     color: Colors.white,
                                                   )),
@@ -268,6 +268,7 @@ class AddCourseContentView extends GetView<AddCourseContentController> {
                                       onTap: () {
                                         // controller.videoPlayerController
                                         //     .seekTo();
+                                        controller.replayfiveSecBehind();
                                       },
                                       child: Icon(
                                         Icons.replay_5_rounded,
@@ -278,10 +279,15 @@ class AddCourseContentView extends GetView<AddCourseContentController> {
                                 Positioned(
                                     left: 14.w,
                                     bottom: 22.w,
-                                    child: Icon(
-                                      Icons.replay_5_rounded,
-                                      color: Colors.white,
-                                      size: 19.sp,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        controller.replayfiveSecFront();
+                                      },
+                                      child: Icon(
+                                        Icons.replay_5_rounded,
+                                        color: Colors.white,
+                                        size: 19.sp,
+                                      ),
                                     )),
                                 Positioned(
                                     left: 1.w,
@@ -296,7 +302,7 @@ class AddCourseContentView extends GetView<AddCourseContentController> {
                                               child: Dialog(
                                                 child: SizedBox(
                                                   height: 30.w,
-                                                  child: Column(
+                                                  child: const Column(
                                                     children: [
                                                       Text("0.5X"),
                                                       Text("1X"),
@@ -310,7 +316,7 @@ class AddCourseContentView extends GetView<AddCourseContentController> {
                                           },
                                         );
                                       },
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.playlist_play_rounded,
                                         color: Colors.white,
                                       ),

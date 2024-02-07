@@ -1,6 +1,7 @@
 import 'package:e_learn/app/customs/custom_body.dart';
 import 'package:e_learn/app/utils/categoryCard.dart';
 import 'package:e_learn/app/utils/colors.dart';
+import 'package:e_learn/app/views/course_card.dart';
 import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,7 @@ class HomepageView extends GetView<HomepageController> {
                       const Text("Hello Name")
                     ],
                   ),
-                  Gap(height: 5.w),
+                  Gap(height: 4.w),
                   Container(
                     height: 45.w,
                     width: 90.w,
@@ -86,26 +87,33 @@ class HomepageView extends GetView<HomepageController> {
                                 ],
                               ),
                             ),
-                            Gap(height: 6.w),
+                            Gap(height: 4.w),
                             SizedBox(
                               height: 12.w,
                               child: TextFormField(
+                                style: TextStyle(
+                                    fontSize: 10.sp,
+                                    color: Colors.black.withOpacity(0.8)),
                                 decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.only(top: 2.w),
                                   // border: OutlineInputBorder(
                                   //     borderRadius: BorderRadius.circular(30)),
                                   filled: true,
                                   fillColor: Colors.white,
-                                  prefixIcon: const Icon(Icons.search),
+                                  prefixIcon: Icon(
+                                    Icons.search,
+                                    size: 15.sp,
+                                  ),
                                   hintText: "What you want to learn?",
                                   hintStyle: TextStyle(fontSize: 10.sp),
                                   prefixIconColor: Colors.black54,
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(14),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(14),
                                   ),
                                 ),
                               ),
@@ -138,67 +146,13 @@ class HomepageView extends GetView<HomepageController> {
                   ),
                   Gap(height: 3.w),
                   SizedBox(
-                    height: 40.w,
+                    height: 42.w,
                     width: 90.w,
                     child: ListView.builder(
                       itemCount: controller.courses!.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 26.w,
-                                width: 42.w,
-                                color: Colors.black,
-                              ),
-                              Gap(height: 1.w),
-                              SizedBox(
-                                width: 41.w,
-                                child: Text(
-                                  controller.courses?[index].courseName ?? '',
-                                  style: TextStyle(
-                                      fontSize: 11.sp,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black.withOpacity(0.9)),
-                                ),
-                              ),
-                              Gap(height: 0.5.w),
-                              SizedBox(
-                                width: 40.w,
-                                child: Text(
-                                  controller.courses?[index].fullName ?? '',
-                                  style: TextStyle(
-                                      fontSize: 8.sp,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black.withOpacity(0.7)),
-                                ),
-                              ),
-                              Gap(height: 0.5.w),
-                              Row(
-                                children: [
-                                  Text(
-                                    "17 videos",
-                                    style: TextStyle(
-                                        fontSize: 9.sp,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black.withOpacity(0.75)),
-                                  ),
-                                  Gap(width: 4.w),
-                                  Text(
-                                    "4 hr 20 min",
-                                    style: TextStyle(
-                                        fontSize: 9.sp,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black.withOpacity(0.75)),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        );
+                        return CourseCard(course: controller.courses![index]);
                       },
                     ),
                   ),
@@ -211,8 +165,8 @@ class HomepageView extends GetView<HomepageController> {
                         fontWeight: FontWeight.bold),
                   ),
                   Gap(height: 3.w),
-                  Container(
-                    height: 44.w,
+                  SizedBox(
+                    height: 47.w,
                     width: 90.w,
                     child: ListView.builder(
                       itemCount: controller.courses?.length,

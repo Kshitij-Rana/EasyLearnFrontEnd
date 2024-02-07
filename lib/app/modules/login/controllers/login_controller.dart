@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:e_learn/app/controller/user_detail_controller.dart';
 import 'package:e_learn/app/routes/app_pages.dart';
 import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
@@ -81,13 +82,13 @@ class LoginController extends GetxController {
             if (result['success']) {
               await prefs!.setString('role', result['role']);
               await prefs!.setString('token', result['token']);
+              Get.put(UserDetailController());
 
               if (result['role'] == 'admin') {
                 Get.offAllNamed(Routes.ADMIN_MAIN);
               } else {
                 Get.offAllNamed(Routes.HOME);
               }
-
               Get.showSnackbar(GetSnackBar(
                 backgroundColor: Colors.green,
                 message: result['message'],

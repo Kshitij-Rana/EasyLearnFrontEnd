@@ -25,6 +25,7 @@ abstract class Routes {
   static const ADD_PRODUCT = _Paths.ADD_PRODUCT;
   static const ADD_COURSE_CONTENT = _Paths.ADD_COURSE_CONTENT;
   static const COURSECONTENT = _Paths.COURSECONTENT;
+  static const EDIT_CATEGORY = _Paths.EDIT_CATEGORY;
 }
 
 abstract class _Paths {
@@ -51,4 +52,5 @@ abstract class _Paths {
   static const ADD_PRODUCT = '/add-product';
   static const ADD_COURSE_CONTENT = '/add-course-content';
   static const COURSECONTENT = '/coursecontent';
+  static const EDIT_CATEGORY = '/edit-category';
 }
