@@ -8,7 +8,8 @@ class HomeController extends GetxController {
   //TODO: Implement HomeController
   List<Widget> screens = [
     const HomepageView(),
-    const SearchpageView(),
+    // const SearchpageView(),
+    // SearchButtonFunction()
     const ProfileView(),
   ];
   var currentIndex = 0.obs;

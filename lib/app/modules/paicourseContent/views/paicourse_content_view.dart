@@ -1,18 +1,23 @@
+import 'package:e_learn/app/customs/components/videoPlayer.dart';
 import 'package:e_learn/app/customs/custom_body.dart';
+import 'package:e_learn/app/modules/addCourseContent/controllers/add_course_content_controller.dart';
 import 'package:e_learn/app/modules/homepage/controllers/homepage_controller.dart';
 import 'package:e_learn/app/routes/app_pages.dart';
 import 'package:e_learn/app/utils/colors.dart';
 import 'package:e_learn/components/constants.dart';
+import 'package:e_learn/components/ratingModal.dart';
+import 'package:e_learn/components/ratingdetails.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-import '../controllers/coursecontent_controller.dart';
+import '../controllers/paicourse_content_controller.dart';
 
-class CoursecontentView extends GetView<CoursecontentController> {
-  final bool isAdmin;
-  const CoursecontentView({this.isAdmin = false, Key? key}) : super(key: key);
+class PaicourseContentView extends GetView<PaicourseContentController> {
+  const PaicourseContentView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var homepageController = Get.find<HomepageController>();
@@ -39,7 +44,7 @@ class CoursecontentView extends GetView<CoursecontentController> {
               children: [
                 Container(
                   width: 90.w,
-                  height: 55.w,
+                  height: 50.w,
                   decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 206, 205, 205)
                           .withOpacity(1),
@@ -51,42 +56,28 @@ class CoursecontentView extends GetView<CoursecontentController> {
                             offset: const Offset(1, 2),
                             spreadRadius: 1),
                       ]),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(13),
-                    child: Image.network(
-                      getImageUrl(controller.courses.image ?? ''),
-                      height: 26.w,
-                      width: 42.w,
-                      fit: BoxFit.cover,
-                    ),
+                  child: Obx(
+                    () => controller.videoplayed.value
+                        ? VideoPlauer()
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(13),
+                            child: Image.network(
+                              getImageUrl(controller.courses.image ?? ''),
+                              height: 26.w,
+                              width: 42.w,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                   ),
                 ),
                 Gap(height: 5.w),
-                controller.isPaid.value == false
-                    ? Text(
-                        "3. How to unlock mobile phone?",
-                        style: TextStyle(
-                            fontSize: 14.sp,
-                            color: Colors.black.withOpacity(0.8),
-                            fontWeight: FontWeight.bold),
-                      )
-                    : const SizedBox.shrink(),
-                Gap(height: 3.w),
-                controller.isPaid.value == false
-                    ? Text(
-                        "Video Details",
-                        style: TextStyle(
-                            fontSize: 14.sp,
-                            color: Colors.black.withOpacity(0.8),
-                            fontWeight: FontWeight.bold),
-                      )
-                    : Text(
-                        "Course Details",
-                        style: TextStyle(
-                            fontSize: 14.sp,
-                            color: Colors.black.withOpacity(0.8),
-                            fontWeight: FontWeight.bold),
-                      ),
+                Text(
+                  "Course Details",
+                  style: TextStyle(
+                      fontSize: 14.sp,
+                      color: Colors.black.withOpacity(0.8),
+                      fontWeight: FontWeight.bold),
+                ),
                 Gap(height: 3.w),
                 Text(
                   controller.courses.description ?? '',
@@ -145,17 +136,30 @@ class CoursecontentView extends GetView<CoursecontentController> {
                                 child: Row(
                                   children: [
                                     Gap(width: 1.w),
-                                    Align(
-                                      alignment:
-                                          controller.isClicked[index].value ==
-                                                  true
-                                              ? Alignment.topCenter
-                                              : Alignment.center,
-                                      child: CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        child: Icon(
-                                          Icons.play_arrow_rounded,
-                                          color: bottomnavigationBarColor,
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (controller.isPlayed[index].value ==
+                                            false) {
+                                          controller.onclickingplayIcon(index);
+                                        } else {
+                                          controller.isPlayed[index].value =
+                                              false;
+                                        }
+                                      },
+                                      child: Align(
+                                        alignment:
+                                            controller.isClicked[index].value ==
+                                                    true
+                                                ? Alignment.topCenter
+                                                : Alignment.center,
+                                        child: CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          child: Icon(
+                                            controller.isPlayed[index].value
+                                                ? Icons.pause
+                                                : Icons.play_arrow_rounded,
+                                            color: bottomnavigationBarColor,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -304,6 +308,55 @@ class CoursecontentView extends GetView<CoursecontentController> {
                         ),
                       )
                     : SizedBox.shrink(),
+                Gap(height: 5.h),
+                Padding(
+                  padding: EdgeInsets.only(left: 0.sp),
+                  child: Text(
+                    homepageController.isRated.value == true
+                        ? "Your Review"
+                        : "Rate this course",
+                    style: TextStyle(
+                        color: Colors.black.withOpacity(0.8),
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Gap(height: 2.w),
+                Obx(
+                  () => Center(
+                    child: homepageController.isRated.value == true
+                        ? RatingDetails(
+                            rating: homepageController.rating[0],
+                          )
+                        : RatingBar.builder(
+                            initialRating:
+                                homepageController.ratingNumber.value,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            unratedColor: primaryColor,
+                            itemPadding:
+                                EdgeInsets.symmetric(horizontal: 12.sp),
+                            itemBuilder: (context, index) => Icon(
+                              Icons.star,
+                              color: bottomnavigationBarColor,
+                            ),
+                            onRatingUpdate: (value) {
+                              homepageController.ratingNumber.value = value;
+                              showCupertinoDialog(
+                                barrierDismissible: true,
+                                context: context,
+                                builder: (context) {
+                                  return RatingModal(
+                                    CourseId: controller.courses.courseId ?? '',
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                  ),
+                )
               ],
             )));
   }

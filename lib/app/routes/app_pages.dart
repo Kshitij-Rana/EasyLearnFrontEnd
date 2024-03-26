@@ -18,6 +18,8 @@ import '../modules/cart/bindings/cart_binding.dart';
 import '../modules/cart/views/cart_view.dart';
 import '../modules/coursecontent/bindings/coursecontent_binding.dart';
 import '../modules/coursecontent/views/coursecontent_view.dart';
+import '../modules/editCoursesAdmin/bindings/edit_courses_admin_binding.dart';
+import '../modules/editCoursesAdmin/views/edit_courses_admin_view.dart';
 import '../modules/edit_category/bindings/edit_category_binding.dart';
 import '../modules/edit_category/views/edit_category_view.dart';
 import '../modules/forgetPassword/bindings/forget_password_binding.dart';
@@ -34,6 +36,8 @@ import '../modules/new_password/bindings/new_password_binding.dart';
 import '../modules/new_password/views/new_password_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
+import '../modules/paicourseContent/bindings/paicourse_content_binding.dart';
+import '../modules/paicourseContent/views/paicourse_content_view.dart';
 import '../modules/personalInformation/bindings/personal_information_binding.dart';
 import '../modules/personalInformation/views/personal_information_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
@@ -102,6 +106,13 @@ class AppPages {
       name: _Paths.CART,
       page: () => const CartView(),
       binding: CartBinding(),
+      children: [
+        GetPage(
+          name: _Paths.CART,
+          page: () => const CartView(),
+          binding: CartBinding(),
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.SEARCHPAGE,
@@ -154,11 +165,15 @@ class AppPages {
       name: _Paths.ADD_PRODUCT,
       page: () => const AddProductView(),
       binding: AddProductBinding(),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 700),
     ),
     GetPage(
       name: _Paths.ADD_COURSE_CONTENT,
       page: () => const AddCourseContentView(),
       binding: AddCourseContentBinding(),
+      transition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 700),
     ),
     GetPage(
       name: _Paths.COURSECONTENT,
@@ -166,9 +181,24 @@ class AppPages {
       binding: CoursecontentBinding(),
     ),
     GetPage(
+      name: _Paths.COURSECONTENTFORADMIN,
+      page: () => const CoursecontentView(isAdmin: true),
+      binding: CoursecontentBinding(),
+    ),
+    GetPage(
       name: _Paths.EDIT_CATEGORY,
       page: () => const EditCategoryView(),
       binding: EditCategoryBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAICOURSE_CONTENT,
+      page: () => const PaicourseContentView(),
+      binding: PaicourseContentBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDIT_COURSES_ADMIN,
+      page: () => const EditCoursesAdminView(),
+      binding: EditCoursesAdminBinding(),
     ),
   ];
 }

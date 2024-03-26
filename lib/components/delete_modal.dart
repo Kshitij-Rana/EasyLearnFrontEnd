@@ -86,6 +86,5 @@ class DeleteModal extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

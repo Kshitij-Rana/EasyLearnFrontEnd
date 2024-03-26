@@ -1,16 +1,31 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:e_learn/app/controller/user_detail_controller.dart';
+import 'package:e_learn/app/routes/app_pages.dart';
+import 'package:e_learn/components/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminProductController extends GetxController {
   final ImagePicker picker = ImagePicker();
   var imagebytes = Uint8List(0);
   final count = 0.obs;
+  late final SharedPreferences prefs;
+
   String videoURL = "";
+  @override
+  Future<void> onInit() async {
+    // TODO: implement onInit
+    super.onInit();
+    prefs = await SharedPreferences.getInstance();
+  }
 
   void uploadVideo() async {
     final image = await picker.pickVideo(source: ImageSource.gallery);

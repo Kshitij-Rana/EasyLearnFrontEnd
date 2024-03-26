@@ -82,11 +82,14 @@ class LoginController extends GetxController {
             if (result['success']) {
               await prefs!.setString('role', result['role']);
               await prefs!.setString('token', result['token']);
+              await prefs!.setString('userId', result['user_id']);
+              print(result['user_id']);
               Get.put(UserDetailController());
 
               if (result['role'] == 'admin') {
                 Get.offAllNamed(Routes.ADMIN_MAIN);
               } else {
+                await Get.put(UserDetailController().getPaidCourses());
                 Get.offAllNamed(Routes.HOME);
               }
               Get.showSnackbar(GetSnackBar(

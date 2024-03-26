@@ -52,14 +52,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
       children: [
         Padding(
           padding: EdgeInsets.only(left: 1.w),
-          child: Text(
-            widget.title ?? '',
-            style: TextStyle(
-              fontSize: isTablet() ? 10.sp : 11.sp,
-              fontWeight: FontWeight.w500,
-              color: primaryTextColor.withOpacity(0.7),
-            ),
-          ),
+          child: widget.title == null
+              ? SizedBox.shrink()
+              : Text(
+                  widget.title ?? '',
+                  style: TextStyle(
+                    fontSize: isTablet() ? 10.sp : 11.sp,
+                    fontWeight: FontWeight.w500,
+                    color: primaryTextColor.withOpacity(0.7),
+                  ),
+                ),
         ),
         Gap(height: 1.w),
         TextFormField(

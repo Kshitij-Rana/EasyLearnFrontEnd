@@ -3,6 +3,7 @@ import 'package:e_learn/app/modules/myLearning/views/my_learning_view.dart';
 import 'package:e_learn/app/modules/profile/views/profile_view.dart';
 import 'package:e_learn/app/modules/searchpage/views/searchpage_view.dart';
 import 'package:e_learn/app/utils/colors.dart';
+import 'package:e_learn/app/views/searchpage.dart';
 import 'package:flutter/material.dart';
 import 'package:global_bottom_navigation_bar/global_bottom_navigation_bar.dart';
 import 'package:get/get.dart';
@@ -30,7 +31,8 @@ class _YourCustomBottomNavigationState extends State<YourCustomBottomNavigation>
     return ScaffoldGlobalBottomNavigation(
       listOfChild: const [
         HomepageView(),
-        SearchpageView(),
+        // SearchpageView(),
+
         MyLearningView(),
         ProfileView(),
       ],
@@ -54,21 +56,21 @@ class _YourCustomBottomNavigationState extends State<YourCustomBottomNavigation>
           color: Colors.white,
           vSync: this,
         ),
-        BottomNavigationItem(
-          activeIcon: Icon(
-            Icons.search_outlined,
-            color: bottomnavigationBarColor,
-            size: 23.sp,
-          ),
-          inActiveIcon: Icon(
-            Icons.search_outlined,
-            color: Colors.grey,
-            size: 20.sp,
-          ),
-          title: 'Search',
-          color: Colors.white,
-          vSync: this,
-        ),
+        // BottomNavigationItem(
+        //   activeIcon: Icon(
+        //     Icons.search_outlined,
+        //     color: bottomnavigationBarColor,
+        //     size: 23.sp,
+        //   ),
+        //   inActiveIcon: Icon(
+        //     Icons.search_outlined,
+        //     color: Colors.grey,
+        //     size: 20.sp,
+        //   ),
+        //   title: 'Search',
+        //   color: Colors.white,
+        //   vSync: this,
+        // ),
         BottomNavigationItem(
           activeIcon: Icon(
             Icons.menu_book_outlined,

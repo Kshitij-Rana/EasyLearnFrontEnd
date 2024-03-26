@@ -26,6 +26,9 @@ dependencies:
   dotted_border: ^2.1.0
   dropdown_button2: ^2.3.9
   video_player: ^2.8.1
+  khalti_flutter: ^3.0.0
+  flutter_rating_bar: ^4.0.1
+
 
 
 

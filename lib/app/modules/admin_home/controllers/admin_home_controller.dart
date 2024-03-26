@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:e_learn/app/controller/user_detail_controller.dart';
+import 'package:e_learn/app/models/admin_paid_course.dart';
 import 'package:e_learn/app/modules/homepage/controllers/homepage_controller.dart';
 import 'package:e_learn/components/addCategoryPopup.dart';
 import 'package:e_learn/components/constants.dart';
@@ -28,7 +29,11 @@ class AdminHomeController extends GetxController {
   var selectedCategory = "".obs;
   var picker = ImagePicker();
   final RxInt val = 1.obs; // Define RxInt for the selected value
-
+  List<Adminpaidcourse> paidCourseList = [];
+  int totalUsers = 0;
+  int totalCourses = 0;
+  int totalPaidOrders = 0;
+  int totalIncome = 0;
 //Image picking
   var imagebytes = Uint8List(0);
   XFile? image;
@@ -41,6 +46,7 @@ class AdminHomeController extends GetxController {
   void onInit() async {
     Get.find<HomepageController>().getCategory();
     prefs = await SharedPreferences.getInstance();
+    await adminGetPaidCoursesDetails();
     update();
 
     super.onInit();
@@ -72,12 +78,61 @@ class AdminHomeController extends GetxController {
 
       if (result['success']) {}
     } catch (e) {
+      print(e);
       Get.showSnackbar(const GetSnackBar(
         backgroundColor: Colors.red,
         message: 'Something went wrong',
         duration: Duration(seconds: 3),
       ));
     }
+  }
+
+  Future<void> adminGetPaidCoursesDetails() async {
+    try {
+      var url =
+          Uri.http(ipaddress, 'finalyearproject_api/admin_getPaidCourses.php');
+      var response =
+          await http.post(url, body: {'token': prefs.getString('token')});
+      var result = jsonDecode(response.body);
+      if (result['success']) {
+        paidCourseList =
+            await adminpaidcourseFromJson(jsonEncode(result['data']));
+        print('0');
+        // Get.showSnackbar(GetSnackBar(
+        //   backgroundColor: Colors.green,
+        //   message: result['message'],
+        //   duration: const Duration(seconds: 3),
+        // ));
+        Set<String> uniqueUsers = {};
+        Set<String> uniqueCourses = {};
+        print(result['email']);
+        totalIncome = 0;
+        totalPaidOrders = 0;
+        for (var item in paidCourseList) {
+          uniqueUsers.add(item.email ?? '');
+          uniqueCourses.add(item.courseId ?? '');
+          if (item.status == 'paid') {
+            totalPaidOrders++;
+          }
+          totalIncome += int.parse(item.total ?? '');
+        }
+
+        totalUsers = uniqueUsers.length;
+        totalCourses = uniqueCourses.length;
+      }
+    } catch (e) {
+      print(e);
+      Get.showSnackbar(const GetSnackBar(
+        backgroundColor: Colors.red,
+        message: 'Something went wrong hai',
+        duration: Duration(seconds: 3),
+      ));
+    }
+  }
+
+  Future<void> onRefresh() async {
+    await adminGetPaidCoursesDetails();
+    update();
   }
 
   void onAddCategory() {
@@ -121,7 +176,7 @@ class AdminHomeController extends GetxController {
           categoryController.clear();
           image = null;
           imagebytes = Uint8List(0);
-          await Get.find<UserDetailController>().getCategory();
+          await Get.find<UserDetailController>().getCourseContent();
           Get.back();
           update();
           Get.showSnackbar(GetSnackBar(

@@ -80,7 +80,8 @@ class EditCategoryController extends GetxController {
           url.value = await imageRef.getDownloadURL();
           // debugPrint("New URL:$url");
         }
-        var uRL = Uri.http(ipaddress, "finalyearproject_api/editCategory.php");
+        var uRL =
+            Uri.http(ipaddress, "finalyearproject_api/edit/editCategory.php");
         var response = await http.post(uRL, body: {
           'token': prefs.getString('token'),
           'category_id': categoryId.value,
@@ -123,6 +124,7 @@ class EditCategoryController extends GetxController {
         'token': prefs.getString('token'),
         'category_id': categoryId.value,
       });
+      print(response.body);
       var result = jsonDecode(response.body);
       if (result['success']) {
         Get.find<UserDetailController>().getCategory();
@@ -143,7 +145,7 @@ class EditCategoryController extends GetxController {
     } catch (e) {
       Get.showSnackbar(const GetSnackBar(
         backgroundColor: Colors.red,
-        message: 'Something went wrong',
+        message: 'Something went wrong hai',
         duration: Duration(seconds: 3),
       ));
     }

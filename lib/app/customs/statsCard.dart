@@ -34,14 +34,16 @@ class StatsCard extends StatelessWidget {
           Text(
             (isAmount ? 'Rs.' : '') + value,
             style: const TextStyle(
-                fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Color(0xff140F1A)),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 label,
-                style: const TextStyle(fontSize: 20, color: Colors.white),
+                style: const TextStyle(fontSize: 20, color: Color(0xff140F1A)),
               ),
               const SizedBox(
                 width: 5,

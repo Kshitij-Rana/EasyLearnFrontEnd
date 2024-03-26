@@ -1,4 +1,8 @@
+import 'package:e_learn/app/controller/user_detail_controller.dart';
 import 'package:e_learn/app/models/courses.dart';
+import 'package:e_learn/app/models/paid_courses.dart';
+import 'package:e_learn/app/modules/coursecontent/controllers/coursecontent_controller.dart';
+import 'package:e_learn/app/modules/homepage/controllers/homepage_controller.dart';
 import 'package:e_learn/app/routes/app_pages.dart';
 import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
@@ -6,14 +10,15 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 class CourseCard extends StatelessWidget {
-  final Courses course;
+  final Paidcourse course;
   const CourseCard({super.key, required this.course});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Get.toNamed(Routes.COURSECONTENT, arguments: course);
+      onTap: () async {
+        Get.toNamed(Routes.PAICOURSE_CONTENT, arguments: course);
+        Get.find<HomepageController>().getRatingofUser(course.courseId ?? '');
       },
       child: Padding(
         padding: const EdgeInsets.only(right: 16),
@@ -50,6 +55,7 @@ class CourseCard extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 11.sp,
                     fontWeight: FontWeight.w500,
+                    overflow: TextOverflow.ellipsis,
                     color: Colors.black.withOpacity(0.9)),
               ),
             ),
@@ -68,20 +74,20 @@ class CourseCard extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  "17 videos",
+                  "${course.numberOfContent ?? '0'} videos",
                   style: TextStyle(
                       fontSize: 9.sp,
                       fontWeight: FontWeight.w400,
                       color: Colors.black.withOpacity(0.75)),
                 ),
                 Gap(width: 4.w),
-                Text(
-                  "4 hr 20 min",
-                  style: TextStyle(
-                      fontSize: 9.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black.withOpacity(0.75)),
-                )
+                // Text(
+                //   "4 hr 20 min",
+                //   style: TextStyle(
+                //       fontSize: 9.sp,
+                //       fontWeight: FontWeight.w400,
+                //       color: Colors.black.withOpacity(0.75)),
+                // )
               ],
             )
           ],
