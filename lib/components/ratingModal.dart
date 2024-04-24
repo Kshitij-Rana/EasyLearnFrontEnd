@@ -1,5 +1,6 @@
 import 'package:e_learn/app/customs/customTextField.dart';
 import 'package:e_learn/app/customs/custom_button.dart';
+import 'package:e_learn/app/models/ratings.dart';
 import 'package:e_learn/app/modules/homepage/controllers/homepage_controller.dart';
 import 'package:e_learn/app/utils/colors.dart';
 import 'package:e_learn/components/constants.dart';
@@ -9,8 +10,11 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 class RatingModal extends StatelessWidget {
+  final isEdit;
+  final Ratings? rating;
   final String CourseId;
-  const RatingModal({super.key, required this.CourseId});
+  const RatingModal(
+      {super.key, required this.CourseId, this.isEdit = false, this.rating});
 
   @override
   Widget build(BuildContext context) {
@@ -33,21 +37,23 @@ class RatingModal extends StatelessWidget {
                 "Rate this course",
                 style: TextStyle(color: Colors.black, fontSize: 14.sp),
               ),
-              RatingBar.builder(
-                initialRating: homepageController.ratingNumber.value,
-                minRating: 1,
-                direction: Axis.horizontal,
-                allowHalfRating: true,
-                itemCount: 5,
-                unratedColor: primaryColor,
-                itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                itemBuilder: (context, index) => Icon(
-                  Icons.star,
-                  color: bottomnavigationBarColor,
+              Obx(
+                () => RatingBar.builder(
+                  initialRating: homepageController.ratingNumber.value,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  unratedColor: primaryColor,
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, index) => Icon(
+                    Icons.star,
+                    color: bottomnavigationBarColor,
+                  ),
+                  onRatingUpdate: (value) {
+                    homepageController.ratingNumber.value = value;
+                  },
                 ),
-                onRatingUpdate: (value) {
-                  homepageController.ratingNumber.value = value;
-                },
               ),
               Gap(height: 4.w),
               Text(
@@ -61,10 +67,16 @@ class RatingModal extends StatelessWidget {
               Gap(height: 2.w),
               CustomButton(
                 color: bottomnavigationBarColor,
-                title: "Submit",
-                onPressed: () {
-                  homepageController.ratingCourses(CourseId);
-                },
+                title: isEdit ? "Edit" : "Submit",
+                onPressed: isEdit
+                    ? () {
+                        homepageController
+                            .onRatingEditCLicked(rating ?? Ratings());
+                        Get.back();
+                      }
+                    : () {
+                        homepageController.ratingCourses(CourseId);
+                      },
               ),
               Gap(height: 5.w),
               GestureDetector(

@@ -18,6 +18,7 @@ class UserPersonalInfo {
   final String? bio;
   final String? otp;
   final String? profileImg;
+  final String? isBlocked;
 
   UserPersonalInfo({
     this.fullName,
@@ -27,6 +28,7 @@ class UserPersonalInfo {
     this.bio,
     this.otp,
     this.profileImg,
+    this.isBlocked,
   });
 
   factory UserPersonalInfo.fromJson(Map<String, dynamic> json) =>
@@ -38,6 +40,7 @@ class UserPersonalInfo {
         bio: json["bio"],
         otp: json["otp"],
         profileImg: json["profile_img"],
+        isBlocked: json["isBlocked"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,5 +51,6 @@ class UserPersonalInfo {
         "bio": bio,
         "otp": otp,
         "profile_img": profileImg,
+        "isBlocked": isBlocked,
       };
 }

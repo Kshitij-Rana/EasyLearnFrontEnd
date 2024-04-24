@@ -1,4 +1,3 @@
-import 'package:e_learn/app/customs/custom_body.dart';
 import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -98,12 +97,12 @@ class CartView extends GetView<CartController> {
                           }
                         },
                         child: Container(
-                          margin: EdgeInsets.only(right: 40, left: 40),
-                          padding: EdgeInsets.all(10),
+                          margin: const EdgeInsets.only(right: 40, left: 40),
+                          padding: const EdgeInsets.all(10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
+                              const Text(
                                 "Pay with khalti",
                                 style: TextStyle(color: Colors.deepPurple),
                               ),

@@ -28,7 +28,11 @@ dependencies:
   video_player: ^2.8.1
   khalti_flutter: ^3.0.0
   flutter_rating_bar: ^4.0.1
-
+  pdf: ^3.10.4
+  open_file: ^3.2.1
+  path_provider: ^2.1.2
+  url_launcher: ^6.2.5
+  icons_flutter: ^0.0.4
 
 
 
@@ -46,3 +50,7 @@ flutter:
     - assets/images/profile.jpeg
     - assets/lottie/
     - assets/svg/
+  fonts:
+    - family: Ruda
+      fonts:
+        - asset: assets/fonts/Ruda-Bold.ttf

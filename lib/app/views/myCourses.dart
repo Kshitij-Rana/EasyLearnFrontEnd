@@ -7,7 +7,6 @@ import 'package:e_learn/components/constants.dart';
 import 'package:e_learn/components/delete_modal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:progress_indicator/progress_indicator.dart';
 import 'package:sizer/sizer.dart';
@@ -32,6 +31,7 @@ class MyCourses extends StatelessWidget {
       onTap: () {
         if (isPaidCourses == true) {
           Get.toNamed(Routes.PAICOURSE_CONTENT, arguments: paidCourse);
+
           homepageController.getRatingofUser(paidCourse?.courseId ?? '');
         } else if (isPaidCourses == false) {
           Get.toNamed(Routes.COURSECONTENTFORADMIN, arguments: course);
@@ -143,7 +143,7 @@ class MyCourses extends StatelessWidget {
                         Gap(height: 0.5.w),
                         Text(
                           isPaidCourses == true
-                              ? paidCourse?.courseName ?? ''
+                              ? "${paidCourse?.numberOfContent ?? '0'} videos"
                               : course?.fullName ?? '',
                           style: TextStyle(
                               fontSize: 9.sp,
@@ -153,16 +153,29 @@ class MyCourses extends StatelessWidget {
                         Gap(height: 3.w),
                         homepageController.role == "admin" ||
                                 homepageController.role == "instructor"
-                            ? SizedBox.shrink()
+                            ? const SizedBox.shrink()
                             : isSearch == true
-                                ? SizedBox.shrink()
+                                ? const SizedBox.shrink()
                                 : Padding(
                                     padding: const EdgeInsets.only(left: 3),
                                     child: SizedBox(
                                       width: 48.w,
                                       height: 1.w,
                                       child: BarProgress(
-                                        percentage: 50.0,
+                                        percentage: paidCourse
+                                                        ?.numberOfContent ==
+                                                    null ||
+                                                paidCourse
+                                                        ?.numberOfContentFinished ==
+                                                    null
+                                            ? 0
+                                            : (int.parse(paidCourse
+                                                        ?.numberOfContentFinished ??
+                                                    "1") /
+                                                int.parse(paidCourse
+                                                        ?.numberOfContent ??
+                                                    "1") *
+                                                100),
                                         backColor: Colors.grey.withOpacity(0.4),
                                         gradient: LinearGradient(colors: [
                                           bottomnavigationBarColor,
@@ -189,7 +202,7 @@ class MyCourses extends StatelessWidget {
               child: homepageController.role == "admin" ||
                       homepageController.role == "instructor"
                   ? PopupMenuButton<String>(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.more_vert,
                         color: Colors.black,
                       ), // Change to Icons.more_horiz if you prefer horizontal dots
@@ -197,8 +210,10 @@ class MyCourses extends StatelessWidget {
                         if (value == 'edit') {
                           Get.toNamed(Routes.EDIT_COURSES_ADMIN,
                               arguments: course);
+                          Get.find<HomepageController>().getCourses();
                         } else if (value == 'delete') {
                           showCupertinoDialog(
+                            barrierDismissible: true,
                             context: context,
                             builder: (context) {
                               return DeleteModal(
@@ -207,6 +222,7 @@ class MyCourses extends StatelessWidget {
                                 deleteFunction: () {
                                   homepageController.deleteCourse(
                                       int.parse(course?.courseId ?? "0"));
+                                  Get.back();
                                 },
                               );
                             },
@@ -225,7 +241,7 @@ class MyCourses extends StatelessWidget {
                         ),
                       ],
                     )
-                  : SizedBox.shrink())
+                  : const SizedBox.shrink())
         ],
       ),
     );

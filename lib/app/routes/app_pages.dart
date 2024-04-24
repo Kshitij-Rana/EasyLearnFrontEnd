@@ -6,6 +6,8 @@ import '../modules/addCourseContent/bindings/add_course_content_binding.dart';
 import '../modules/addCourseContent/views/add_course_content_view.dart';
 import '../modules/addProduct/bindings/add_product_binding.dart';
 import '../modules/addProduct/views/add_product_view.dart';
+import '../modules/addQuiz/bindings/add_quiz_binding.dart';
+import '../modules/addQuiz/views/add_quiz_view.dart';
 import '../modules/admin_category/bindings/admin_category_binding.dart';
 import '../modules/admin_category/views/admin_category_view.dart';
 import '../modules/admin_home/bindings/admin_home_binding.dart';
@@ -14,10 +16,18 @@ import '../modules/admin_main/bindings/admin_main_binding.dart';
 import '../modules/admin_main/views/admin_main_view.dart';
 import '../modules/admin_product/bindings/admin_product_binding.dart';
 import '../modules/admin_product/views/admin_product_view.dart';
+import '../modules/all_users/bindings/all_users_binding.dart';
+import '../modules/all_users/views/all_users_view.dart';
 import '../modules/cart/bindings/cart_binding.dart';
 import '../modules/cart/views/cart_view.dart';
+import '../modules/changePassword/bindings/change_password_binding.dart';
+import '../modules/changePassword/views/change_password_view.dart';
 import '../modules/coursecontent/bindings/coursecontent_binding.dart';
 import '../modules/coursecontent/views/coursecontent_view.dart';
+import '../modules/detailedCategoryCourses/bindings/detailed_category_courses_binding.dart';
+import '../modules/detailedCategoryCourses/views/detailed_category_courses_view.dart';
+import '../modules/editCourseContent/bindings/edit_course_content_binding.dart';
+import '../modules/editCourseContent/views/edit_course_content_view.dart';
 import '../modules/editCoursesAdmin/bindings/edit_courses_admin_binding.dart';
 import '../modules/editCoursesAdmin/views/edit_courses_admin_view.dart';
 import '../modules/edit_category/bindings/edit_category_binding.dart';
@@ -30,6 +40,8 @@ import '../modules/homepage/bindings/homepage_binding.dart';
 import '../modules/homepage/views/homepage_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/mainAdminhome/bindings/main_adminhome_binding.dart';
+import '../modules/mainAdminhome/views/main_adminhome_view.dart';
 import '../modules/myLearning/bindings/my_learning_binding.dart';
 import '../modules/myLearning/views/my_learning_view.dart';
 import '../modules/new_password/bindings/new_password_binding.dart';
@@ -42,12 +54,18 @@ import '../modules/personalInformation/bindings/personal_information_binding.dar
 import '../modules/personalInformation/views/personal_information_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/quiz/bindings/quiz_binding.dart';
+import '../modules/quiz/views/quiz_view.dart';
+import '../modules/quizDetails/bindings/quiz_details_binding.dart';
+import '../modules/quizDetails/views/quiz_details_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import '../modules/searchpage/bindings/searchpage_binding.dart';
 import '../modules/searchpage/views/searchpage_view.dart';
 import '../modules/signup/bindings/signup_binding.dart';
 import '../modules/signup/views/signup_view.dart';
+import '../modules/userDetail/bindings/user_detail_binding.dart';
+import '../modules/userDetail/views/user_detail_view.dart';
 
 part 'app_routes.dart';
 
@@ -166,23 +184,30 @@ class AppPages {
       page: () => const AddProductView(),
       binding: AddProductBinding(),
       transition: Transition.fadeIn,
-      transitionDuration: Duration(milliseconds: 700),
+      transitionDuration: const Duration(milliseconds: 700),
     ),
     GetPage(
       name: _Paths.ADD_COURSE_CONTENT,
       page: () => const AddCourseContentView(),
       binding: AddCourseContentBinding(),
       transition: Transition.fadeIn,
-      transitionDuration: Duration(milliseconds: 700),
+      transitionDuration: const Duration(milliseconds: 700),
+      children: [
+        GetPage(
+          name: _Paths.ADD_COURSE_CONTENT,
+          page: () => const AddCourseContentView(),
+          binding: AddCourseContentBinding(),
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.COURSECONTENT,
-      page: () => const CoursecontentView(),
+      page: () => CoursecontentView(),
       binding: CoursecontentBinding(),
     ),
     GetPage(
       name: _Paths.COURSECONTENTFORADMIN,
-      page: () => const CoursecontentView(isAdmin: true),
+      page: () => CoursecontentView(isAdmin: true),
       binding: CoursecontentBinding(),
     ),
     GetPage(
@@ -199,6 +224,51 @@ class AppPages {
       name: _Paths.EDIT_COURSES_ADMIN,
       page: () => const EditCoursesAdminView(),
       binding: EditCoursesAdminBinding(),
+    ),
+    GetPage(
+      name: _Paths.QUIZ,
+      page: () => const QuizView(),
+      binding: QuizBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_QUIZ,
+      page: () => const AddQuizView(),
+      binding: AddQuizBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDIT_COURSE_CONTENT,
+      page: () => const EditCourseContentView(),
+      binding: EditCourseContentBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHANGE_PASSWORD,
+      page: () => const ChangePasswordView(),
+      binding: ChangePasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.USER_DETAIL,
+      page: () => const UserDetailView(),
+      binding: UserDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.MAIN_ADMINHOME,
+      page: () => const MainAdminhomeView(),
+      binding: MainAdminhomeBinding(),
+    ),
+    GetPage(
+      name: _Paths.QUIZ_DETAILS,
+      page: () => const QuizDetailsView(),
+      binding: QuizDetailsBinding(),
+    ),
+    GetPage(
+      name: _Paths.ALL_USERS,
+      page: () => const AllUsersView(),
+      binding: AllUsersBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETAILED_CATEGORY_COURSES,
+      page: () => const DetailedCategoryCoursesView(),
+      binding: DetailedCategoryCoursesBinding(),
     ),
   ];
 }

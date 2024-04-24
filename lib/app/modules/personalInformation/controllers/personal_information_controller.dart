@@ -11,13 +11,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PersonalInformationController extends GetxController {
-  //TODO: Implement PersonalInformationController
   GlobalKey<FormState> personalInformationKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController bioController = TextEditingController();
   XFile? image;
+  RxBool isLoading = false.obs;
   final ImagePicker picker = ImagePicker();
   var imagebytes = Uint8List(0).obs;
   RxBool isFetched = false.obs;
@@ -31,11 +31,11 @@ class PersonalInformationController extends GetxController {
     prefs = await SharedPreferences.getInstance();
     try {
       var userController = Get.find<UserDetailController>();
-      nameController.text = userController.userInfo?.fullName ?? '';
-      emailController.text = userController.userInfo?.email ?? '';
-      addressController.text = userController.userInfo?.address ?? '';
-      bioController.text = userController.userInfo?.bio ?? '';
-      url.value = userController.userInfo?.profileImg ?? '';
+      nameController.text = userController.userInfo?.value.fullName ?? '';
+      emailController.text = userController.userInfo?.value.email ?? '';
+      addressController.text = userController.userInfo?.value.address ?? '';
+      bioController.text = userController.userInfo?.value.bio ?? '';
+      url.value = userController.userInfo?.value.profileImg ?? '';
     } catch (e) {
       debugPrint("Error:$e");
     }
@@ -80,6 +80,7 @@ class PersonalInformationController extends GetxController {
   }
 
   void onSaveInformation() async {
+    isLoading.value = true;
     try {
       if (personalInformationKey.currentState!.validate()) {
         var url =
@@ -126,6 +127,7 @@ class PersonalInformationController extends GetxController {
         duration: Duration(seconds: 3),
       ));
     }
+    isLoading.value = false;
   }
 
   void increment() => count.value++;

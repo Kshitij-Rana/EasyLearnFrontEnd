@@ -7,22 +7,7 @@ import 'package:get/get.dart';
 HomepageController controller = Get.find();
 
 class SearchButtonFunction extends SearchDelegate {
-  // const SearchpageView({Key? key}) : super(key: key);
   @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: const Text('SearchpageView'),
-  //       centerTitle: true,
-  //     ),
-  //     body: const Center(
-  //       child: Text(
-  //         'SearchpageView is working',
-  //         style: TextStyle(fontSize: 20),
-  //       ),
-  //     ),
-  //   );
-  // }
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
@@ -35,14 +20,11 @@ class SearchButtonFunction extends SearchDelegate {
 
   @override
   Widget? buildLeading(BuildContext context) {
-    // TODO: implement buildLeading
-    // throw UnimplementedError();
     return null;
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
     return buildSuggestions(context);
   }
 

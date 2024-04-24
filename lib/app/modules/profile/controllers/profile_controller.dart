@@ -14,7 +14,7 @@ class ProfileController extends GetxController {
   void onInit() async {
     prefs = await SharedPreferences.getInstance();
     var userProfile = Get.find<UserDetailController>();
-    profilePic.value = userProfile.userInfo?.profileImg ?? '';
+    profilePic.value = userProfile.userInfo?.value.profileImg ?? '';
     print("pic:${profilePic.value}");
     super.onInit();
   }

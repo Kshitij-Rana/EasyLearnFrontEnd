@@ -2,9 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:e_learn/app/customs/customTextField.dart';
 import 'package:e_learn/app/customs/custom_body.dart';
 import 'package:e_learn/app/customs/custom_button.dart';
-import 'package:e_learn/app/modules/admin_home/controllers/admin_home_controller.dart';
 import 'package:e_learn/app/modules/homepage/controllers/homepage_controller.dart';
-import 'package:e_learn/app/routes/app_pages.dart';
 import 'package:e_learn/app/utils/colors.dart';
 import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +18,6 @@ class EditCoursesAdminView extends GetView<EditCoursesAdminController> {
   @override
   Widget build(BuildContext context) {
     var homeController = Get.find<HomepageController>();
-    var adminController = Get.find<AdminHomeController>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Course'),
@@ -179,6 +176,9 @@ class EditCoursesAdminView extends GetView<EditCoursesAdminController> {
                       : SizedBox(
                           height: 15.w,
                           child: DropdownButtonFormField(
+                            dropdownColor: Colors
+                                .white, // Set the dropdown background color to white
+
                             isExpanded: true,
                             decoration: const InputDecoration(
                               filled: true,
@@ -298,7 +298,7 @@ class EditCoursesAdminView extends GetView<EditCoursesAdminController> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       ListTile(
-                        contentPadding: EdgeInsets.all(0),
+                        contentPadding: const EdgeInsets.all(0),
                         title: Text(
                           "Online",
                           style: TextStyle(
@@ -318,7 +318,7 @@ class EditCoursesAdminView extends GetView<EditCoursesAdminController> {
                             )),
                       ),
                       ListTile(
-                        contentPadding: EdgeInsets.all(0),
+                        contentPadding: const EdgeInsets.all(0),
                         title: Text(
                           "Offline",
                           style: TextStyle(
@@ -338,6 +338,49 @@ class EditCoursesAdminView extends GetView<EditCoursesAdminController> {
                             )),
                       ),
                     ],
+                  ),
+                  Gap(height: 3.w),
+
+                  Obx(
+                    () => Form(
+                        key: controller.offlineFormKey,
+                        child: Column(
+                          children: [
+                            Gap(height: 3.w),
+                            controller.val.value == 0
+                                ? CustomTextField(
+                                    textInputAction: TextInputAction.next,
+                                    title: "Location",
+                                    hintText: "Rautahat,Nepal",
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "Enter your location";
+                                      }
+                                      return null;
+                                    },
+                                    controller: controller.locationController)
+                                : const SizedBox.shrink(),
+                            Gap(height: 3.w),
+                            controller.val.value == 0
+                                ? CustomTextField(
+                                    keyboardType: TextInputType.phone,
+                                    textInputAction: TextInputAction.done,
+                                    title: "Contact No",
+                                    hintText: "9806XXXXXX",
+                                    controller: controller.contactController,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "Enter your phone number";
+                                      }
+                                      return null;
+                                    },
+                                  )
+                                : const SizedBox.shrink(),
+                            controller.val.value == 0
+                                ? Gap(height: 10.w)
+                                : const SizedBox.shrink(),
+                          ],
+                        )),
                   ),
                   Gap(height: 3.w),
                   CustomTextField(

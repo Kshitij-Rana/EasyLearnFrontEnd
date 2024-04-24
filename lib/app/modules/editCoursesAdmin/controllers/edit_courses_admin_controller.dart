@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:e_learn/app/controller/user_detail_controller.dart';
 import 'package:e_learn/app/models/courses.dart';
 import 'package:e_learn/app/modules/homepage/controllers/homepage_controller.dart';
 import 'package:e_learn/components/constants.dart';
@@ -15,6 +14,9 @@ class EditCoursesAdminController extends GetxController {
   var course = Get.arguments as Courses;
   //TODO: Implement EditCoursesAdminController
   GlobalKey<FormState> productFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> offlineFormKey = GlobalKey<FormState>();
+  TextEditingController locationController = TextEditingController();
+  TextEditingController contactController = TextEditingController();
   TextEditingController courseNameController = TextEditingController();
   TextEditingController coursePriceController = TextEditingController();
   TextEditingController courseDescriptionController = TextEditingController();
@@ -40,7 +42,6 @@ class EditCoursesAdminController extends GetxController {
     courseDescriptionController.text = course.description ?? 'No description';
     url.value = course.image ?? '';
     selectedCategory.value = course.categoryId ?? '';
-    print(course.categoryName);
     selectedcategoryName = course.categoryName ?? '';
     update();
     super.onInit();
@@ -67,10 +68,19 @@ class EditCoursesAdminController extends GetxController {
     isLoading.value = true;
     try {
       if (productFormKey.currentState!.validate()) {
+        if (val.value == 0) {
+          if (!offlineFormKey.currentState!.validate()) {
+            return;
+          }
+        }
         var url =
-            Uri.http(ipaddress, "finalyearproject_api/edit/editCourses.php");
+            Uri.http(ipaddress, "finalyearproject_api/edit/editCourse.php");
         var form = http.MultipartRequest('POST', url);
-        form.fields['course_id'] = course.categoryId ?? '';
+        if (val.value == 0) {
+          form.fields['location'] = locationController.text;
+          form.fields['contact_no'] = contactController.text;
+        }
+        form.fields['course_id'] = course.courseId ?? '';
         form.fields['token'] = prefs.getString('token')!;
         form.fields['is_online'] = val.value.toString();
         form.fields['course_name'] = courseNameController.text;
@@ -84,14 +94,14 @@ class EditCoursesAdminController extends GetxController {
 
         var data = jsonDecode(response.body);
         if (data['success']) {
+          Get.back();
+          Get.find<HomepageController>().getCourses();
+          update();
           Get.showSnackbar(GetSnackBar(
             message: data['message'],
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 3),
           ));
-          var userController = Get.find<UserDetailController>();
-          userController.getCourses();
-          update();
         } else {
           Get.showSnackbar(GetSnackBar(
             message: data['message'],
@@ -107,80 +117,13 @@ class EditCoursesAdminController extends GetxController {
         ));
       }
     } catch (e) {
-      print(e);
-
       Get.showSnackbar(GetSnackBar(
         message: "Something went wrong hai:$e",
         backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
+        duration: const Duration(seconds: 3),
       ));
     }
     isLoading.value = false;
-  }
-
-  Future<void> oncontentEdit() async {
-    isLoading.value = true;
-    try {
-      if (productFormKey.currentState!.validate()) {
-        var url = Uri.http(
-            ipaddress, "finalyearproject_api/edit/editCourseContent.php");
-        var form = http.MultipartRequest('POST', url);
-        form.fields['content_id'] = course.categoryId ?? '';
-        form.fields['token'] = prefs.getString('token')!;
-        form.fields['content_name'] = val.value.toString();
-        form.fields['content_description'] = courseNameController.text;
-        form.fields['course_id'] = courseDescriptionController.text;
-        form.fields['content_video'] = coursePriceController.text;
-        form.fields['content_duration'] = selectedCategory.value;
-
-        form.files.add(http.MultipartFile.fromBytes('image', imagebytes,
-            filename: image!.name));
-        var response = await http.Response.fromStream(await form.send());
-
-        var data = jsonDecode(response.body);
-        if (data['success']) {
-          Get.showSnackbar(GetSnackBar(
-            message: data['message'],
-            backgroundColor: Colors.green,
-            duration: const Duration(seconds: 3),
-          ));
-          var userController = Get.find<UserDetailController>();
-          userController.getCourses();
-          update();
-        } else {
-          Get.showSnackbar(GetSnackBar(
-            message: data['message'],
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 3),
-          ));
-        }
-      } else {
-        Get.showSnackbar(const GetSnackBar(
-          message: "Fill all the fields",
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3),
-        ));
-      }
-    } catch (e) {
-      print(e);
-
-      Get.showSnackbar(GetSnackBar(
-        message: "Something went wrong hai:$e",
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-      ));
-    }
-    isLoading.value = false;
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   void increment() => count.value++;

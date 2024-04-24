@@ -23,6 +23,11 @@ class AdminHomeController extends GetxController {
   TextEditingController categoryController = TextEditingController();
   //for adding product
   GlobalKey<FormState> productFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> offlineFormKey = GlobalKey<FormState>();
+
+  TextEditingController locationController = TextEditingController();
+  TextEditingController contactController = TextEditingController();
+
   TextEditingController courseNameController = TextEditingController();
   TextEditingController coursePriceController = TextEditingController();
   TextEditingController courseDescriptionController = TextEditingController();
@@ -42,11 +47,17 @@ class AdminHomeController extends GetxController {
   final count = 0.obs;
   var addingCategoryLoading = false.obs;
   var stats;
+  RxBool isAdmin = false.obs;
   @override
   void onInit() async {
     Get.find<HomepageController>().getCategory();
     prefs = await SharedPreferences.getInstance();
-    await adminGetPaidCoursesDetails();
+    prefs.getString('role') == 'mainadmin'
+        ? isAdmin.value = true
+        : isAdmin.value = false;
+    isAdmin.value
+        ? await adminGetPaidCoursesDetails()
+        : await instructorGetPaidCoursesDetails();
     update();
 
     super.onInit();
@@ -78,7 +89,6 @@ class AdminHomeController extends GetxController {
 
       if (result['success']) {}
     } catch (e) {
-      print(e);
       Get.showSnackbar(const GetSnackBar(
         backgroundColor: Colors.red,
         message: 'Something went wrong',
@@ -95,9 +105,7 @@ class AdminHomeController extends GetxController {
           await http.post(url, body: {'token': prefs.getString('token')});
       var result = jsonDecode(response.body);
       if (result['success']) {
-        paidCourseList =
-            await adminpaidcourseFromJson(jsonEncode(result['data']));
-        print('0');
+        paidCourseList = adminpaidcourseFromJson(jsonEncode(result['data']));
         // Get.showSnackbar(GetSnackBar(
         //   backgroundColor: Colors.green,
         //   message: result['message'],
@@ -105,7 +113,46 @@ class AdminHomeController extends GetxController {
         // ));
         Set<String> uniqueUsers = {};
         Set<String> uniqueCourses = {};
-        print(result['email']);
+        totalIncome = 0;
+        totalPaidOrders = 0;
+        for (var item in paidCourseList) {
+          uniqueUsers.add(item.email ?? '');
+          uniqueCourses.add(item.courseId ?? '');
+          if (item.status == 'paid') {
+            totalPaidOrders++;
+          }
+          totalIncome += int.parse(item.total ?? '');
+        }
+
+        totalUsers = uniqueUsers.length;
+        totalCourses = uniqueCourses.length;
+      }
+    } catch (e) {
+      print(e);
+      Get.showSnackbar(const GetSnackBar(
+        backgroundColor: Colors.red,
+        message: 'Something went wrong hai',
+        duration: Duration(seconds: 3),
+      ));
+    }
+  }
+
+  Future<void> instructorGetPaidCoursesDetails() async {
+    try {
+      var url = Uri.http(
+          ipaddress, 'finalyearproject_api/instructorDashboardInfo.php');
+      var response =
+          await http.post(url, body: {'token': prefs.getString('token')});
+      var result = jsonDecode(response.body);
+      if (result['success']) {
+        paidCourseList = adminpaidcourseFromJson(jsonEncode(result['data']));
+        // Get.showSnackbar(GetSnackBar(
+        //   backgroundColor: Colors.green,
+        //   message: result['message'],
+        //   duration: const Duration(seconds: 3),
+        // ));
+        Set<String> uniqueUsers = {};
+        Set<String> uniqueCourses = {};
         totalIncome = 0;
         totalPaidOrders = 0;
         for (var item in paidCourseList) {
@@ -131,7 +178,9 @@ class AdminHomeController extends GetxController {
   }
 
   Future<void> onRefresh() async {
-    await adminGetPaidCoursesDetails();
+    isAdmin.value
+        ? await adminGetPaidCoursesDetails()
+        : instructorGetPaidCoursesDetails();
     update();
   }
 
@@ -208,9 +257,17 @@ class AdminHomeController extends GetxController {
   void addProduct() async {
     try {
       if (productFormKey.currentState!.validate()) {
+        if (val.value == 0) {
+          if (!offlineFormKey.currentState!.validate()) {
+            return;
+          }
+        }
         var url = Uri.http(ipaddress, "finalyearproject_api/addCourses.php");
         var form = http.MultipartRequest('POST', url);
-
+        if (val.value == 0) {
+          form.fields['location'] = locationController.text;
+          form.fields['contact_no'] = contactController.text;
+        }
         form.fields['token'] = prefs.getString('token')!;
         form.fields['is_online'] = val.value.toString();
         form.fields['course_name'] = courseNameController.text;
@@ -228,6 +285,9 @@ class AdminHomeController extends GetxController {
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 3),
           ));
+          Get.find<UserDetailController>().getCourses();
+          Get.find<HomepageController>().getCourses();
+
           isAdded.value = true;
         } else {
           Get.showSnackbar(GetSnackBar(

@@ -1,17 +1,16 @@
 import 'package:e_learn/app/controller/user_detail_controller.dart';
 import 'package:e_learn/app/customs/custom_body.dart';
-import 'package:e_learn/app/modules/cart/controllers/cart_controller.dart';
-import 'package:e_learn/app/modules/cart/views/cart_view.dart';
 import 'package:e_learn/app/routes/app_pages.dart';
 import 'package:e_learn/app/utils/categoryCard.dart';
 import 'package:e_learn/app/utils/colors.dart';
 import 'package:e_learn/app/views/course_card.dart';
+import 'package:e_learn/app/views/paid_course_card.dart';
 import 'package:e_learn/app/views/searchpage.dart';
 import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'package:get/get.dart';
+import 'package:icons_flutter/icons_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sizer/sizer.dart';
 
@@ -22,7 +21,6 @@ class HomepageView extends GetView<HomepageController> {
   @override
   Widget build(BuildContext context) {
     var userdetailcontroller = Get.find<UserDetailController>();
-    var cartController = Get.put(CartController());
     Get.put(HomepageController());
     return GestureDetector(
       onTap: () {
@@ -41,25 +39,41 @@ class HomepageView extends GetView<HomepageController> {
             title: Row(
               children: [
                 Gap(width: 30.w),
-                const Icon(
-                  Icons.back_hand,
-                  color: Colors.black,
-                ),
-                Gap(width: 3.w),
-                const Text(
-                  "Hello Name",
-                  style: TextStyle(
-                    color: Colors.black,
+                SizedBox(
+                  width: 50.w,
+                  child: Row(
+                    children: [
+                      Obx(
+                        () =>
+                            userdetailcontroller.userInfo.value.fullName == null
+                                ? const Text(
+                                    "Good Morning",
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                : Text(
+                                    "Hello ${userdetailcontroller.userInfo.value.fullName!.split(' ')[0]}",
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                      ),
+                      Gap(width: 3.w),
+                      const Icon(
+                        FlutterIcons.hand_ent,
+                        color: Colors.black,
+                      ),
+                    ],
                   ),
                 ),
-                Gap(width: 17.w),
                 IconButton(
                   onPressed: () {
                     Get.toNamed(Routes.CART);
                   },
                   icon: Icon(
-                    Icons.shopping_cart,
-                    color: Colors.black,
+                    FontAwesome.shopping_cart,
+                    color: buttonColor,
                   ),
                 )
               ],
@@ -190,7 +204,7 @@ class HomepageView extends GetView<HomepageController> {
                           itemCount: userdetailcontroller.paidCourses!.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
-                            return CourseCard(
+                            return PaidCourseCard(
                                 course:
                                     userdetailcontroller.paidCourses![index]);
                           },
@@ -198,7 +212,7 @@ class HomepageView extends GetView<HomepageController> {
                       ),
                       Gap(height: 3.w),
                       Text(
-                        'Recommended courses',
+                        'Trending courses',
                         style: TextStyle(
                             color: primaryTextColor,
                             fontSize: 15.sp,
@@ -212,130 +226,12 @@ class HomepageView extends GetView<HomepageController> {
                           itemCount: controller.courses?.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: 26.w,
-                                    width: 42.w,
-                                    color: Colors.black,
-                                    child: Image.network(
-                                      getImageUrl(
-                                          controller.courses?[index].image ??
-                                              ''),
-                                      fit: BoxFit.cover,
-                                      height: 26.w,
-                                      width: 42.w,
-                                    ),
-                                  ),
-                                  Gap(height: 1.w),
-                                  Row(
-                                    children: [
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            width: 35.w,
-                                            child: Text(
-                                              controller.courses?[index]
-                                                      .courseName ??
-                                                  '',
-                                              style: TextStyle(
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  fontSize: 11.sp,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.black
-                                                      .withOpacity(0.9)),
-                                            ),
-                                          ),
-                                          Gap(height: 0.5.w),
-                                          SizedBox(
-                                            width: 35.w,
-                                            child: Text(
-                                              controller.courses?[index]
-                                                      .fullName ??
-                                                  '',
-                                              style: TextStyle(
-                                                  fontSize: 8.sp,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Colors.black
-                                                      .withOpacity(0.7)),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          cartController.addCoursesTocart(
-                                              course:
-                                                  controller.courses![index]);
-                                        },
-                                        child: Icon(
-                                          Icons.add_shopping_cart,
-                                          color: Colors.black,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Gap(height: 0.5.w),
-                                  // Row(
-                                  //   children: [
-                                  //     Text(
-                                  //       "Rating Stars",
-                                  //       style: TextStyle(
-                                  //           fontSize: 9.sp,
-                                  //           fontWeight: FontWeight.w400,
-                                  //           color:
-                                  //               Colors.black.withOpacity(0.75)),
-                                  //     ),
-                                  //     Gap(width: 4.w),
-                                  //     Text(
-                                  //       "4.0",
-                                  //       style: TextStyle(
-                                  //           fontSize: 9.sp,
-                                  //           fontWeight: FontWeight.w400,
-                                  //           color:
-                                  //               Colors.black.withOpacity(0.75)),
-                                  //     )
-                                  //   ],
-                                  // ),
-                                  RatingBar.builder(
-                                    itemSize: 12.sp,
-                                    initialRating: double.parse(controller
-                                            .courses![index].averageRating ??
-                                        '0.0'),
-                                    minRating: 1,
-                                    direction: Axis.horizontal,
-                                    allowHalfRating: true,
-                                    itemCount: 5,
-                                    unratedColor: primaryColor,
-                                    itemPadding:
-                                        EdgeInsets.symmetric(horizontal: 1.sp),
-                                    itemBuilder: (context, index) => Icon(
-                                      Icons.star,
-                                      color: bottomnavigationBarColor,
-                                    ),
-                                    onRatingUpdate: (value) {},
-                                    ignoreGestures: true,
-                                  ),
-                                  Gap(height: 0.5.w),
-                                  Text(
-                                    controller.courses?[index].price ?? '',
-                                    style: TextStyle(
-                                        fontSize: 10.sp,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black.withOpacity(0.90)),
-                                  )
-                                ],
-                              ),
-                            );
+                            return CourseCard(
+                                // ignore: invalid_use_of_protected_member
+                                course: controller.courses?.value[index]);
                           },
                         ),
-                      )
+                      ),
                     ],
                   )),
             ),

@@ -2,11 +2,13 @@ import 'package:e_learn/app/customs/customRefreshIndicator.dart';
 import 'package:e_learn/app/customs/custom_body.dart';
 import 'package:e_learn/app/customs/statsCard.dart';
 import 'package:e_learn/app/modules/homepage/controllers/homepage_controller.dart';
+import 'package:e_learn/app/routes/app_pages.dart';
 import 'package:e_learn/app/utils/colors.dart';
 import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:icons_flutter/icons_flutter.dart';
 import 'package:sizer/sizer.dart';
 
 import '../controllers/admin_home_controller.dart';
@@ -28,9 +30,20 @@ class AdminHomeView extends GetView<AdminHomeController> {
       // })
       appBar: AppBar(
         backgroundColor: backgroundColor,
-        title: const Text(
-          'Dashboard',
-          style: TextStyle(color: Colors.black),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Dashboard',
+              style: TextStyle(color: Colors.black),
+            ),
+            Gap(width: 2.w),
+            Icon(
+              FontAwesome.dashboard,
+              color: const Color(0xffDCBFFF),
+              size: 12.5.sp,
+            )
+          ],
         ),
         centerTitle: true,
       ),
@@ -43,7 +56,7 @@ class AdminHomeView extends GetView<AdminHomeController> {
           child: Column(
             children: [
               SizedBox(
-                height: 80.h,
+                height: 95.w,
                 // margin: const EdgeInsets.all(10),
                 child: GetBuilder<AdminHomeController>(
                   builder: (controller) => GridView(
@@ -54,29 +67,31 @@ class AdminHomeView extends GetView<AdminHomeController> {
                             crossAxisSpacing: 15),
                     children: [
                       StatsCard(
-                        color: Color(0xffDCBFFF),
+                        color: const Color(0xffDCBFFF),
                         label: "Total Users",
                         value: "${controller.totalUsers}",
-                        icon: Icon(Icons.people, color: Color(0xff140F1A)),
+                        icon:
+                            const Icon(Icons.people, color: Color(0xff140F1A)),
                       ),
                       StatsCard(
-                          color: Color(0xffDCBFFF),
+                          color: const Color(0xffDCBFFF),
                           label: "Total Courses",
                           value: "${controller.totalCourses}",
-                          icon: Icon(Icons.menu_book_rounded,
+                          icon: const Icon(Icons.menu_book_rounded,
                               color: Color(0xff140F1A))),
                       StatsCard(
-                          color: Color(0xffDCBFFF),
+                          color: const Color(0xffDCBFFF),
                           label: "Total Orders",
                           value: "${controller.totalPaidOrders}",
-                          icon: Icon(Icons.production_quantity_limits_rounded,
+                          icon: const Icon(
+                              Icons.production_quantity_limits_rounded,
                               color: Color(0xff140F1A))),
                       StatsCard(
-                        color: Color(0xffDCBFFF),
+                        color: const Color(0xffDCBFFF),
                         isAmount: true,
                         label: "Total Income",
                         value: "${controller.totalIncome}",
-                        icon: Icon(Icons.attach_money_outlined,
+                        icon: const Icon(Icons.attach_money_outlined,
                             color: Color(0xff140F1A)),
                       ),
                       // GestureDetector(
@@ -110,6 +125,19 @@ class AdminHomeView extends GetView<AdminHomeController> {
                   ),
                 ),
               ),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(Routes.USER_DETAIL,
+                      arguments: controller.paidCourseList);
+                },
+                child: Text(
+                  "View Details",
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 182, 131, 243),
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w500),
+                ),
+              )
             ],
           ),
         ),

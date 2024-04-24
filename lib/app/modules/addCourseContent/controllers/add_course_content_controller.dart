@@ -2,11 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:e_learn/app/models/courses.dart';
-import 'package:e_learn/app/modules/coursecontent/controllers/coursecontent_controller.dart';
 import 'package:e_learn/app/modules/homepage/controllers/homepage_controller.dart';
+
 import 'package:http/http.dart' as http;
 
-import 'package:e_learn/app/controller/user_detail_controller.dart';
 import 'package:e_learn/components/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +24,7 @@ class AddCourseContentController extends GetxController {
   Duration? position;
   Duration? fiveSecBehind;
   Duration? fiveSecFront;
+  RxBool isLoading = false.obs;
   var courses = Get.arguments as Courses;
   SharedPreferences? prefs;
   var progress = 0.0.obs;
@@ -210,6 +210,7 @@ class AddCourseContentController extends GetxController {
   }
 
   void onAddCourseContent() async {
+    isLoading.value = true;
     if (courseFormKey.currentState!.validate()) {
       try {
         // var url;
@@ -242,7 +243,9 @@ class AddCourseContentController extends GetxController {
             // print(data['success']);
             // print(data['message']);
             if (data['success']) {
+              Get.find<HomepageController>().getCourseContent();
               Get.back(closeOverlays: true);
+              Get.back();
               Get.showSnackbar(GetSnackBar(
                 message: data['message'],
                 backgroundColor: Colors.green,
@@ -276,6 +279,7 @@ class AddCourseContentController extends GetxController {
         e;
       }
     }
+    isLoading.value = false;
   }
 
   void increment() => count.value++;

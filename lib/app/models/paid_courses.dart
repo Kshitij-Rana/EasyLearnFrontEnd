@@ -25,41 +25,44 @@ class Paidcourse {
   final String? description;
   final String? fullName;
   final String? numberOfContent;
+  final String? numberOfContentFinished;
 
-  Paidcourse({
-    this.numberOfContent,
-    this.fullName,
-    this.orderId,
-    this.total,
-    this.orderDate,
-    this.status,
-    this.lineTotal,
-    this.courseId,
-    this.courseName,
-    this.categoryId,
-    this.price,
-    this.image,
-    this.isOnline,
-    this.description,
-  });
+  Paidcourse(
+      {this.numberOfContent,
+      this.fullName,
+      this.orderId,
+      this.total,
+      this.orderDate,
+      this.status,
+      this.lineTotal,
+      this.courseId,
+      this.courseName,
+      this.categoryId,
+      this.price,
+      this.image,
+      this.isOnline,
+      this.description,
+      this.numberOfContentFinished});
 
   factory Paidcourse.fromJson(Map<String, dynamic> json) => Paidcourse(
-      orderId: json["order_id"],
-      total: json["total"],
-      orderDate: json["order_date"] == null
-          ? null
-          : DateTime.parse(json["order_date"]),
-      status: json["status"],
-      lineTotal: json["line_total"],
-      courseId: json["course_id"],
-      courseName: json["course_name"],
-      categoryId: json["category_id"],
-      price: json["price"],
-      image: json["image"],
-      isOnline: json["is_online"],
-      description: json["description"],
-      fullName: json["full_name"],
-      numberOfContent: json["number_of_courses"]);
+        orderId: json["order_id"],
+        total: json["total"],
+        orderDate: json["order_date"] == null
+            ? null
+            : DateTime.parse(json["order_date"]),
+        status: json["status"],
+        lineTotal: json["line_total"],
+        courseId: json["course_id"],
+        courseName: json["course_name"],
+        categoryId: json["category_id"],
+        price: json["price"],
+        image: json["image"],
+        isOnline: json["is_online"],
+        description: json["description"],
+        fullName: json["full_name"],
+        numberOfContent: json["number_of_contents"],
+        numberOfContentFinished: json["number_of_progress_trackings"],
+      );
 
   Map<String, dynamic> toJson() => {
         "order_id": orderId,
@@ -75,6 +78,7 @@ class Paidcourse {
         "is_online": isOnline,
         "description": description,
         "full_name": fullName,
-        "number_of_courses": numberOfContent
+        "number_of_contents": numberOfContent,
+        "number_of_progress_trackings": numberOfContentFinished,
       };
 }

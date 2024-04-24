@@ -298,11 +298,14 @@ class PersonalInformationView extends GetView<PersonalInformationController> {
                     },
                   ),
                   Gap(height: 3.w),
-                  CustomButton(
-                    title: "Save",
-                    onPressed: () {
-                      controller.onSaveInformation();
-                    },
+                  Obx(
+                    () => CustomButton(
+                      isLoading: controller.isLoading.value,
+                      title: "Save",
+                      onPressed: () {
+                        controller.onSaveInformation();
+                      },
+                    ),
                   )
                 ],
               ),

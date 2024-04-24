@@ -53,7 +53,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         Padding(
           padding: EdgeInsets.only(left: 1.w),
           child: widget.title == null
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : Text(
                   widget.title ?? '',
                   style: TextStyle(

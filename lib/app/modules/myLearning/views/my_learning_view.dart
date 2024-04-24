@@ -1,5 +1,4 @@
 import 'package:e_learn/app/controller/user_detail_controller.dart';
-import 'package:e_learn/app/modules/homepage/controllers/homepage_controller.dart';
 import 'package:e_learn/app/utils/colors.dart';
 import 'package:e_learn/app/views/myCourses.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,7 @@ class MyLearningView extends GetView<MyLearningController> {
   const MyLearningView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var homepageCOntroller = Get.find<HomepageController>();
+    Get.put(UserDetailController);
     var userdetailController = Get.find<UserDetailController>();
 
     return Scaffold(
@@ -32,12 +31,6 @@ class MyLearningView extends GetView<MyLearningController> {
         body: SafeArea(
           child: Column(
             children: [
-              // Center(
-              //   child: Text(
-              //     "My Courses",
-              //     style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
-              //   ),
-              // ),
               Column(
                 children: [
                   SizedBox(

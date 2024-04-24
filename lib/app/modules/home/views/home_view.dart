@@ -1,9 +1,7 @@
 import 'package:e_learn/app/modules/homepage/views/homepage_view.dart';
 import 'package:e_learn/app/modules/myLearning/views/my_learning_view.dart';
 import 'package:e_learn/app/modules/profile/views/profile_view.dart';
-import 'package:e_learn/app/modules/searchpage/views/searchpage_view.dart';
 import 'package:e_learn/app/utils/colors.dart';
-import 'package:e_learn/app/views/searchpage.dart';
 import 'package:flutter/material.dart';
 import 'package:global_bottom_navigation_bar/global_bottom_navigation_bar.dart';
 import 'package:get/get.dart';
@@ -14,12 +12,15 @@ class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return YourCustomBottomNavigation();
+    return const YourCustomBottomNavigation();
   }
 }
 
 class YourCustomBottomNavigation extends StatefulWidget {
+  const YourCustomBottomNavigation({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _YourCustomBottomNavigationState createState() =>
       _YourCustomBottomNavigationState();
 }

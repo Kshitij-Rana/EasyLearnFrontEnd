@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:e_learn/app/models/course_content.dart';
 import 'package:e_learn/app/models/courses.dart';
 import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:http/http.dart' as http;
 class CartController extends GetxController {
   //TODO: Implement CartController
   late final SharedPreferences? prefs;
+  RxList<CourseContent>? courseContentCourseId = RxList<CourseContent>([]);
 
   List<CartItem> cart = [];
   var total = 0.0.obs;
@@ -24,7 +26,7 @@ class CartController extends GetxController {
 
   void addCoursesTocart({required Courses course, int? quantity}) {
     if (cart.any((element) => element.course.courseId == course.courseId)) {
-      Get.showSnackbar(GetSnackBar(
+      Get.showSnackbar(const GetSnackBar(
         message: "This course is already added to the cart!",
         duration: Duration(seconds: 2),
         backgroundColor: Colors.red,
@@ -72,7 +74,6 @@ class CartController extends GetxController {
     prefs = await SharedPreferences.getInstance();
     super.onInit();
     mapCart();
-
     updateTotal();
     updateLocal();
   }
@@ -92,10 +93,8 @@ class CartController extends GetxController {
         'total': total.value.toString(),
         'cart': getMyCart(),
       });
-      print(getMyCart());
 
       var result = jsonDecode(response.body);
-      print(result);
       if (result['success']) {
         Get.showSnackbar(GetSnackBar(
           backgroundColor: Colors.green,
@@ -111,7 +110,6 @@ class CartController extends GetxController {
         ));
       }
     } catch (e) {
-      print(e);
       Get.showSnackbar(const GetSnackBar(
         backgroundColor: Colors.red,
         message: 'Something went wrong',

@@ -1,8 +1,7 @@
+// ignore: file_names
 import 'dart:async';
 import 'dart:math';
 
-import 'package:e_learn/app/modules/addCourseContent/controllers/add_course_content_controller.dart';
-import 'package:e_learn/app/modules/paicourseContent/bindings/paicourse_content_binding.dart';
 import 'package:e_learn/app/modules/paicourseContent/controllers/paicourse_content_controller.dart';
 import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
@@ -47,39 +46,42 @@ class _VideoPlauerState extends State<VideoPlauer> {
             Positioned(
               right: 40.w,
               bottom: 20.w,
-              child: AnimatedOpacity(
-                duration: Duration(seconds: 1),
-                opacity: controller.opacity.value,
-                child: controller.videoPlaying.value
-                    ? GestureDetector(
-                        onTap: () {
-                          controller.onScreenTouched();
-                          controller.videoPlaying.value = false;
-                          controller.videoPlayerController.pause();
-                          controller.timer?.cancel();
-                        },
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white.withOpacity(0.8),
-                          child: const Icon(Icons.pause, color: Colors.black),
-                        ),
-                      )
-                    : GestureDetector(
-                        onTap: () {
-                          controller.onScreenTouched();
+              child: Obx(
+                () => AnimatedOpacity(
+                  duration: const Duration(seconds: 1),
+                  opacity: controller.opacity.value,
+                  child: controller.videoPlaying.value
+                      ? GestureDetector(
+                          onTap: () {
+                            controller.onScreenTouched();
+                            controller.videoPlaying.value = false;
+                            controller.videoPlayerController.pause();
+                            controller.saveLastWatchedPosition();
+                            controller.timer?.cancel();
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white.withOpacity(0.8),
+                            child: const Icon(Icons.pause, color: Colors.black),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            controller.onScreenTouched();
 
-                          controller.videoPlaying.value = true;
-                          controller.videoPlayerController.play();
-                          controller.oncontrollerUpdate();
-                          controller.timer = Timer.periodic(
-                              const Duration(seconds: 1),
-                              (Timer t) => controller.oncontrollerUpdate());
-                        },
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white.withOpacity(0.8),
-                          child:
-                              const Icon(Icons.play_arrow, color: Colors.black),
+                            controller.videoPlaying.value = true;
+                            controller.videoPlayerController.play();
+                            controller.oncontrollerUpdate();
+                            controller.timer = Timer.periodic(
+                                const Duration(seconds: 1),
+                                (Timer t) => controller.oncontrollerUpdate());
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white.withOpacity(0.8),
+                            child: const Icon(Icons.play_arrow,
+                                color: Colors.black),
+                          ),
                         ),
-                      ),
+                ),
               ),
             ),
             Positioned(
@@ -88,7 +90,7 @@ class _VideoPlauerState extends State<VideoPlauer> {
                 child: Obx(
                   () => AnimatedOpacity(
                     opacity: controller.opacity.value,
-                    duration: Duration(seconds: 1),
+                    duration: const Duration(seconds: 1),
                     child: Row(
                       children: [
                         Text(
@@ -153,7 +155,7 @@ class _VideoPlauerState extends State<VideoPlauer> {
                 bottom: 22.w,
                 child: Obx(
                   () => AnimatedOpacity(
-                    duration: Duration(seconds: 1),
+                    duration: const Duration(seconds: 1),
                     opacity: controller.opacity.value,
                     child: GestureDetector(
                       onTap: () {
@@ -173,7 +175,7 @@ class _VideoPlauerState extends State<VideoPlauer> {
                 left: 14.w,
                 bottom: 22.w,
                 child: AnimatedOpacity(
-                  duration: Duration(seconds: 1),
+                  duration: const Duration(seconds: 1),
                   opacity: controller.opacity.value,
                   child: GestureDetector(
                     onTap: () {
@@ -190,7 +192,7 @@ class _VideoPlauerState extends State<VideoPlauer> {
                 left: 1.w,
                 top: 1.w,
                 child: AnimatedOpacity(
-                  duration: Duration(seconds: 1),
+                  duration: const Duration(seconds: 1),
                   opacity: controller.opacity.value,
                   child: GestureDetector(
                     onTap: () {
@@ -224,57 +226,118 @@ class _VideoPlauerState extends State<VideoPlauer> {
                 )),
             Positioned(
                 bottom: 1,
-                child: AnimatedOpacity(
-                  duration: Duration(seconds: 1),
-                  opacity: controller.opacity.value,
-                  child: SizedBox(
-                    width: 90.w,
-                    child: SliderTheme(
-                      data: SliderTheme.of(context).copyWith(
-                          activeTrackColor: Colors.red[700],
-                          inactiveTrackColor: Colors.red[100],
-                          trackShape: RoundedRectSliderTrackShape(),
-                          trackHeight: 2.0,
-                          thumbShape:
-                              RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                          thumbColor: Colors.redAccent,
-                          overlayColor: Colors.red.withAlpha(32),
-                          overlayShape:
-                              RoundSliderOverlayShape(overlayRadius: 10.0),
-                          tickMarkShape: RoundSliderTickMarkShape(),
-                          activeTickMarkColor: Colors.red[700],
-                          inactiveTickMarkColor: Colors.red[100],
-                          valueIndicatorShape:
-                              PaddleSliderValueIndicatorShape(),
-                          valueIndicatorColor: Colors.redAccent,
-                          valueIndicatorTextStyle:
-                              TextStyle(color: Colors.white)),
-                      child: Slider(
-                        value: max(0, min(controller.progress * 100, 100)),
-                        min: 0,
-                        max: 100,
-                        divisions: 100,
-                        label: controller.position?.toString().split(".")[0],
-                        onChanged: (value) {
-                          controller.progress.value = value * 0.01;
-                        },
-                        onChangeStart: (value) {
-                          controller?.videoPlayerController.pause();
-                        },
-                        onChangeEnd: (value) {
-                          final duration =
-                              controller.videoPlayerController.value.duration;
-                          if (duration != null) {
-                            var newValue = max(0, min(value, 99)) * 0.01;
-                            var milis =
-                                (duration.inMilliseconds * newValue).toInt();
-                            controller.videoPlayerController
-                                .seekTo(Duration(milliseconds: milis));
-                            controller.videoPlayerController.play();
-                          }
-                        },
-                      ),
-                    ),
+                child: Obx(
+                  () => AnimatedOpacity(
+                    duration: const Duration(seconds: 1),
+                    opacity: controller.opacity.value,
+                    child: SizedBox(
+                        width: 90.w,
+                        child:
+                            // SliderTheme(
+                            //   data: SliderTheme.of(context).copyWith(
+                            //       activeTrackColor: Colors.red[700],
+                            //       inactiveTrackColor: Colors.red[100],
+                            //       trackShape: RoundedRectSliderTrackShape(),
+                            //       trackHeight: 2.0,
+                            //       thumbShape:
+                            //           RoundSliderThumbShape(enabledThumbRadius: 6.0),
+                            //       thumbColor: Colors.redAccent,
+                            //       overlayColor: Colors.red.withAlpha(32),
+                            //       overlayShape:
+                            //           RoundSliderOverlayShape(overlayRadius: 10.0),
+                            //       tickMarkShape: RoundSliderTickMarkShape(),
+                            //       activeTickMarkColor: Colors.red[700],
+                            //       inactiveTickMarkColor: Colors.red[100],
+                            //       valueIndicatorShape:
+                            //           PaddleSliderValueIndicatorShape(),
+                            //       valueIndicatorColor: Colors.redAccent,
+                            //       valueIndicatorTextStyle:
+                            //           TextStyle(color: Colors.white)),
+                            //   child: Slider(
+                            //     value: max(0, min(controller.progress * 100, 100)),
+                            //     min: 0,
+                            //     max: 100,
+                            //     divisions: 100,
+                            //     label: controller.position?.toString().split(".")[0],
+                            //     onChanged: (value) {
+                            //       controller.progress.value = value * 0.01;
+                            //     },
+                            //     onChangeStart: (value) {
+                            //       controller?.videoPlayerController.pause();
+                            //     },
+                            //     onChangeEnd: (value) {
+                            //       final duration =
+                            //           controller.videoPlayerController.value.duration;
+                            //       if (duration != null) {
+                            //         var newValue = max(0, min(value, 99)) * 0.01;
+                            //         var milis =
+                            //             (duration.inMilliseconds * newValue).toInt();
+                            //         controller.videoPlayerController
+                            //             .seekTo(Duration(milliseconds: milis));
+                            //         controller.videoPlayerController.play();
+                            //       }
+                            //     },
+                            //   ),
+                            // ),
+                            SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            activeTrackColor: Colors
+                                .blue[700], // Change the active track color
+                            inactiveTrackColor: Colors
+                                .blue[100], // Change the inactive track color
+                            trackShape:
+                                const RoundedRectSliderTrackShape(), // Keep the rounded rect track shape
+                            trackHeight:
+                                4.0, // Increase the track height for a thicker look
+                            thumbShape: const RoundSliderThumbShape(
+                                enabledThumbRadius:
+                                    8.0), // Increase the thumb size
+                            thumbColor:
+                                Colors.blueAccent, // Change the thumb color
+                            overlayColor: Colors.blue.withAlpha(
+                                60), // Adjust the overlay color and transparency
+                            overlayShape: const RoundSliderOverlayShape(
+                                overlayRadius:
+                                    12.0), // Increase the overlay radius
+                            tickMarkShape:
+                                const RoundSliderTickMarkShape(), // Keep the round tick mark shape
+                            activeTickMarkColor: Colors
+                                .blue[700], // Change the active tick mark color
+                            inactiveTickMarkColor: Colors.blue[
+                                100], // Change the inactive tick mark color
+                            valueIndicatorShape:
+                                const PaddleSliderValueIndicatorShape(), // Keep the paddle value indicator shape
+                            valueIndicatorColor: Colors
+                                .blueAccent, // Change the value indicator color
+                            valueIndicatorTextStyle: const TextStyle(
+                                color: Colors
+                                    .white), // Keep the white text style for value indicator
+                          ),
+                          child: Slider(
+                            value: max(0, min(controller.progress * 100, 100)),
+                            min: 0,
+                            max: 100,
+                            divisions: 100,
+                            label:
+                                controller.position?.toString().split(".")[0],
+                            onChanged: (value) {
+                              controller.progress.value = value * 0.01;
+                            },
+                            onChangeStart: (value) {
+                              controller.videoPlayerController.pause();
+                            },
+                            onChangeEnd: (value) {
+                              final duration = controller
+                                  .videoPlayerController.value.duration;
+                              var newValue = max(0, min(value, 99)) * 0.01;
+                              var milis =
+                                  (duration.inMilliseconds * newValue).toInt();
+                              controller.videoPlayerController
+                                  .seekTo(Duration(milliseconds: milis));
+                              controller.videoPlayerController.play();
+                            },
+                          ),
+                        )),
                   ),
                 ))
           ],

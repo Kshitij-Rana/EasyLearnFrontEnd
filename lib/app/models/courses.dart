@@ -24,9 +24,13 @@ class Courses {
   final String? userId;
   final String? numberOfContents;
   final String? totalDuration;
+  final String? location;
+  final String? ConactNo;
 
   Courses(
       {this.courseId,
+      this.location,
+      this.ConactNo,
       this.categoryId,
       this.fullName,
       this.courseName,
@@ -53,7 +57,9 @@ class Courses {
       userId: json["user_id"],
       numberOfContents: json["number_of_contents"],
       averageRating: json["avg_rating"],
-      totalDuration: json["total_duration"]);
+      totalDuration: json["total_duration"],
+      ConactNo: json["contact_no"],
+      location: json["location"]);
 
   Map<String, dynamic> toJson() => {
         "course_id": courseId,
@@ -68,6 +74,8 @@ class Courses {
         "user_id": userId,
         "number_of_contents": numberOfContents,
         "total_duration": totalDuration,
-        "avg_rating": averageRating
+        "avg_rating": averageRating,
+        "contact_no": ConactNo,
+        "location": location
       };
 }

@@ -151,6 +151,7 @@ class EditCategoryView extends GetView<EditCategoryController> {
                     title: "Delete",
                     onPressed: () {
                       showCupertinoDialog(
+                        barrierDismissible: true,
                         context: context,
                         builder: (context) {
                           return DeleteModal(

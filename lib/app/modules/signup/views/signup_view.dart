@@ -33,8 +33,10 @@ class SignupView extends GetView<SignupController> {
                           fontSize: 20.sp,
                           fontWeight: FontWeight.bold),
                     ),
+                    Gap(height: 4.w),
+
                     CustomTextField(
-                      hintText: "full name",
+                      hintText: "Full name",
                       controller: controller.nameController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -43,8 +45,10 @@ class SignupView extends GetView<SignupController> {
                         return null;
                       },
                     ),
+                    Gap(height: 4.w),
+
                     CustomTextField(
-                      hintText: "email",
+                      hintText: "Email",
                       controller: controller.emailController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -64,9 +68,8 @@ class SignupView extends GetView<SignupController> {
                         filled: true,
                         fillColor: Colors.white,
                         hintText: "Role",
-                        labelText: "Role",
                         labelStyle: TextStyle(
-                            color: Colors.black.withOpacity(0.6),
+                            color: Colors.black.withOpacity(0.5),
                             fontSize: 18,
                             fontWeight: FontWeight.w500),
                         prefixIcon: Icon(Icons.person,
@@ -75,7 +78,7 @@ class SignupView extends GetView<SignupController> {
                             borderRadius: BorderRadius.circular(7),
                             borderSide: BorderSide(
                                 width: 2,
-                                color: Colors.black.withOpacity(0.5))),
+                                color: Colors.black.withOpacity(0.25))),
                         disabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(7),
                             borderSide: const BorderSide(
@@ -102,10 +105,15 @@ class SignupView extends GetView<SignupController> {
                         }
                         return null;
                       },
+                      dropdownColor: Colors
+                          .white, // Set the dropdown background color to white
                     ),
+
+                    Gap(height: 4.w),
+
                     CustomTextField(
                       isPassword: true,
-                      hintText: "password",
+                      hintText: "Password",
                       controller: controller.passwordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -116,9 +124,11 @@ class SignupView extends GetView<SignupController> {
                         return null;
                       },
                     ),
+                    Gap(height: 4.w),
+
                     CustomTextField(
                       isPassword: true,
-                      hintText: "confirm password",
+                      hintText: "Confirm Password",
                       controller: controller.confirmPasswordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {

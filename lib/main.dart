@@ -6,7 +6,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
-import 'package:khalti_flutter/localization/khalti_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'app/routes/app_pages.dart';
@@ -21,7 +20,7 @@ void main() async {
   var token = prefs.getString('token');
   var role = prefs.getString('role');
   if (role != null) {
-    await Get.put(UserDetailController());
+    Get.put(UserDetailController());
     Get.put(CartController(), permanent: true);
   }
   runApp(
@@ -40,7 +39,9 @@ void main() async {
           initialRoute: token != null
               ? (role != null && role == 'admin')
                   ? Routes.ADMIN_MAIN
-                  : Routes.HOME
+                  : (role == 'mainadmin')
+                      ? Routes.MAIN_ADMINHOME
+                      : Routes.HOME
               : Routes.LOGIN,
           getPages: AppPages.routes,
           defaultTransition: Transition.cupertino,

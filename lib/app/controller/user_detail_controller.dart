@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserDetailController extends GetxController {
-  UserPersonalInfo? userInfo;
+  Rx<UserPersonalInfo> userInfo = Rx<UserPersonalInfo>(UserPersonalInfo());
   RxBool isFetched = false.obs;
   late final SharedPreferences prefs;
   var profilePic = ''.obs;
@@ -43,9 +43,9 @@ class UserDetailController extends GetxController {
         //     backgroundColor: Colors.green,
         //     message: result['message'],
         //     duration: const Duration(seconds: 3)));
-        userInfo = userPersonalInfoFromJson(jsonEncode(result['data']));
+        userInfo.value = userPersonalInfoFromJson(jsonEncode(result['data']));
         isFetched.value = true;
-        profilePic.value = userInfo?.profileImg ?? '';
+        profilePic.value = userInfo?.value.profileImg ?? '';
         update();
       }
     } catch (e) {

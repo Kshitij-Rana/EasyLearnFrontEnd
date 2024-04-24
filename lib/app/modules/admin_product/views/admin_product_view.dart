@@ -13,6 +13,7 @@ class AdminProductView extends GetView<AdminProductController> {
   const AdminProductView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    Get.put(AdminProductController);
     var homepageCOntroller = Get.find<HomepageController>();
     return Scaffold(
         appBar: AppBar(
@@ -29,16 +30,45 @@ class AdminProductView extends GetView<AdminProductController> {
               SizedBox(
                 width: 95.w,
                 height: 151.w,
-                child: ListView.builder(
-                  itemCount:
-                      homepageCOntroller.coursesAddedByInstructor?.length ?? 0,
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return MyCourses(
-                        course: homepageCOntroller
-                            .coursesAddedByInstructor![index]);
-                  },
-                ),
+                child:
+                    // controller.prefs.getString('role') == "mainadmin"
+                    //     ? homepageCOntroller.courses?.length == 0
+                    //         ? Center(
+                    //             child: Text(
+                    //             "No courses added yet!",
+                    //             style: TextStyle(
+                    //                 fontSize: 15.sp,
+                    //                 color: Colors.black.withOpacity(0.6)),
+                    //           ))
+                    //         :
+                    //      ListView.builder(
+                    //         itemCount: homepageCOntroller.courses?.length ?? 0,
+                    //         physics: const BouncingScrollPhysics(),
+                    //         itemBuilder: (context, index) {
+                    //           return MyCourses(
+                    //               course: homepageCOntroller.courses![index]);
+                    //         },
+                    //       )
+                    // :
+                    homepageCOntroller.coursesAddedByInstructor?.length == 0
+                        ? Center(
+                            child: Text(
+                            "No courses added yet!",
+                            style: TextStyle(
+                                fontSize: 15.sp,
+                                color: Colors.black.withOpacity(0.6)),
+                          ))
+                        : ListView.builder(
+                            itemCount: homepageCOntroller
+                                    .coursesAddedByInstructor?.length ??
+                                0,
+                            physics: const BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return MyCourses(
+                                  course: homepageCOntroller
+                                      .coursesAddedByInstructor![index]);
+                            },
+                          ),
               ),
               GestureDetector(
                 onTap: () {

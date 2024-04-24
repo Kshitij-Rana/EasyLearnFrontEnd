@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-var ipaddress = '192.168.1.70';
+var ipaddress = '192.168.1.148';
 bool isTablet() {
   if (SizerUtil.deviceType == DeviceType.mobile) {
     return false;

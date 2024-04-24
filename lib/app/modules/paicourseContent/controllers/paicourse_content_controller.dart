@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:e_learn/app/models/progress_tracking.dart';
+import 'package:e_learn/app/models/quiz.dart';
+import 'package:e_learn/app/models/quizMarks.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:e_learn/app/models/course_content.dart';
-import 'package:e_learn/app/models/courses.dart';
 import 'package:e_learn/app/models/paid_courses.dart';
-import 'package:e_learn/app/modules/addCourseContent/controllers/add_course_content_controller.dart';
 import 'package:e_learn/app/modules/homepage/controllers/homepage_controller.dart';
+import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -17,31 +21,39 @@ class PaicourseContentController extends GetxController {
   Duration? position;
   Duration? fiveSecBehind;
   Duration? fiveSecFront;
+  RxBool isSubmitted = false.obs;
   // var courses = Get.arguments as Courses;
   SharedPreferences? prefs;
   var progress = 0.0.obs;
   var videoLoading = false.obs;
   var isMute = false.obs;
+  RxBool isCourseCompleted = false.obs;
+  RxString courseSelected = ''.obs;
+  RxInt selectedOption = 1.obs;
   String videoUrl = '';
   final hour = "00".obs;
   final minute = "00".obs;
   final second = "00".obs;
   Timer? timer;
-
+  bool _isVideoCompleted = false; // Add this flag to track video completion
+  RxInt score = 0.obs;
   final count = 0.obs;
 
   var videoPlaying = false.obs;
   var isInitialized = false.obs;
   var isLandScape = false.obs;
   RxBool isPaid = false.obs;
+
   var courses = Get.arguments as Paidcourse;
-  var selectedUrl =
-      'https://firebasestorage.googleapis.com/v0/b/easy-learn-8803a.appspot.com/o/2024-03-14%2015%3A06%3A38.558293VID-20240209-WA0042.mp4?alt=media&token=4b497356-1eea-4aeb-a9f7-77312e302d66'
-          .obs;
+  var selectedUrl = ''.obs;
   var length = 0;
   RxBool videoplayed = false.obs;
   var homecontroller = Get.find<HomepageController>();
   RxList<CourseContent>? courseContentCourseId = RxList<CourseContent>([]);
+  RxList<ProgressTracking>? progressTracking = RxList<ProgressTracking>([]);
+  RxList<Quiz>? quizz = RxList<Quiz>([]);
+  RxList<QuizMarks>? quizMarks = RxList<QuizMarks>([]);
+
   late VideoPlayerController videoPlayerController;
 
   late List<RxBool> isClicked;
@@ -62,37 +74,67 @@ class PaicourseContentController extends GetxController {
 
   void replayfiveSecBehind() {
     onScreenTouched();
-    fiveSecBehind =
-        videoPlayerController.value.duration - const Duration(seconds: 5);
-    videoPlayerController.seekTo(fiveSecBehind!);
+    // Calculate the new position by subtracting 5 seconds from the current position
+    Duration newPosition =
+        videoPlayerController.value.position - const Duration(seconds: 5);
+    // Ensure the new position is not less than 0
+    newPosition = newPosition < Duration.zero ? Duration.zero : newPosition;
+    videoPlayerController.seekTo(newPosition);
   }
 
   void replayfiveSecFront() {
     onScreenTouched();
-    fiveSecFront =
-        videoPlayerController.value.duration + const Duration(seconds: 5);
-    videoPlayerController.seekTo(fiveSecFront!);
+    // Calculate the new position by adding 5 seconds to the current position
+    Duration newPosition =
+        videoPlayerController.value.position + const Duration(seconds: 5);
+    // Ensure the new position is not more than the video's duration
+    newPosition = newPosition > videoPlayerController.value.duration
+        ? videoPlayerController.value.duration
+        : newPosition;
+    videoPlayerController.seekTo(newPosition);
   }
 
-  void initializeVideo() async {
+  Future<void> initializeVideo(String lessonId) async {
     videoPlayerController =
         VideoPlayerController.contentUri(Uri.parse(selectedUrl.value))
+          ..addListener(() {
+            if (!_isVideoCompleted &&
+                videoPlayerController.value.position ==
+                    videoPlayerController.value.duration) {
+              _isVideoCompleted =
+                  true; // Set the flag to true when the video completes
+              addProgress(lessonId);
+            }
+          })
           ..initialize().then((_) async {
-            // await videoPlayerController.videoPlayerOptions!.webOptions!.controls;
-            // videoPlayerController
-            //     .videoPlayerOptions!.webOptions!.controls.allowPlaybackRate;
-
             videoPlayerController.pause();
             videoLoading.value = false;
             oncontrollerUpdate();
             update();
+            await loadLastWatchedPosition(); // Load the last watched position
           })
           ..addListener(() {
             if (videoPlayerController.value.isPlaying) {
               videoLoading.value = true;
             }
           });
+
     update();
+  }
+
+  Future<void> addProgress(String lessonId) async {
+    var url = Uri.http(ipaddress, "finalyearproject_api/lessontracking.php");
+
+    var response = await http.post(url, body: {
+      'token': prefs!.getString('token')!,
+      'progress_number': '100',
+      'lesson_id': lessonId,
+    });
+    var data = jsonDecode(response.body);
+    if (data['success']) {
+      await addCOurseContent();
+      update();
+    } else {}
   }
 
   Future setAllOrientation() async {
@@ -115,7 +157,7 @@ class PaicourseContentController extends GetxController {
   }
 
   void oncontrollerUpdate() async {
-    duration ??= videoPlayerController.value.duration;
+    duration = videoPlayerController.value.duration;
     var duration2 = duration;
     if (duration2 == null) return;
     var position1 = await videoPlayerController.position;
@@ -137,17 +179,87 @@ class PaicourseContentController extends GetxController {
     minute.value = mins;
     second.value = secs;
     update();
+
+    // Save the last watched position when the video is paused or ends
+    if (!videoPlaying.value) {
+      saveLastWatchedPosition();
+    }
   }
 
-  void onclickingplayIcon(int index) {
+  Future<void> onclickingplayIcon(int index, String lessonId) async {
     for (int i = 0; i < isPlayed.length; i++) {
       isPlayed[i].value = false;
     }
     selectedUrl.value = "${courseContentCourseId?[index].contentVideo}";
     isPlayed[index].value = true;
     videoplayed.value = true;
-    initializeVideo();
+    await initializeVideo(lessonId);
     isInitialized.value = true;
+  }
+
+  void checkAnswer(int currentQuizIndex) {
+    if (selectedOption.value == 1) {
+      courseSelected.value = quizz!.value[currentQuizIndex].option1 ?? '';
+    } else if (selectedOption.value == 2) {
+      courseSelected.value = quizz!.value[currentQuizIndex].option2 ?? '';
+    } else if (selectedOption.value == 3) {
+      courseSelected.value = quizz!.value[currentQuizIndex].option3 ?? '';
+    } else if (selectedOption.value == 4) {
+      courseSelected.value = quizz!.value[currentQuizIndex].option4 ?? '';
+    }
+
+    if (quizz!.value[currentQuizIndex].correctOption == courseSelected.value) {
+      score.value += 1;
+    }
+  }
+
+  Future<void> addMarks() async {
+    var url = Uri.http(ipaddress, "finalyearproject_api/addQuizMarks.php");
+    var response = await http.post(url, body: {
+      'token': prefs!.getString('token')!,
+      'obtained_marks': score.value.toString(),
+      'course_id': courses.courseId,
+      'full_marks': quizz!.length.toString()
+    });
+    var data = jsonDecode(response.body);
+    if (data['success']) {
+      await getMarks();
+      Get.showSnackbar(GetSnackBar(
+        message: data['message'],
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 3),
+      ));
+    } else {
+      Get.showSnackbar(GetSnackBar(
+        message: data['message'],
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 3),
+      ));
+    }
+  }
+
+  Future<void> getMarks() async {
+    var url = Uri.http(ipaddress, "finalyearproject_api/getQuizMarks.php");
+    var response = await http.post(url, body: {
+      'token': prefs!.getString('token'),
+      'course_id': courses.courseId,
+    });
+    var data = jsonDecode(response.body);
+    if (data['success']) {
+      quizMarks?.value = quizMarksFromJson(jsonEncode(data['data']));
+      Future.delayed(const Duration(seconds: 2));
+      // Get.showSnackbar(GetSnackBar(
+      //   message: data['message'],
+      //   backgroundColor: Colors.green,
+      //   duration: const Duration(seconds: 3),
+      // ));
+    } else {
+      Get.showSnackbar(GetSnackBar(
+        message: data['message'],
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 3),
+      ));
+    }
   }
 
   Widget videoPreviewWidget() {
@@ -173,22 +285,100 @@ class PaicourseContentController extends GetxController {
     super.dispose();
   }
 
-  @override
-  void onInit() {
-    // TODO: implement onInit
+  Future<void> getQuiz(String courseId) async {
+    try {
+      var url = Uri.http(ipaddress, 'finalyearproject_api/getQuiz.php');
+      var response = await http.post(url,
+          body: {'token': prefs!.getString('token'), 'course_id': courseId});
+      var result = jsonDecode(response.body);
+      if (result['success']) {
+        // Get.showSnackbar(GetSnackBar(
+        //     backgroundColor: Colors.green,
+        //     message: result['message'],
+        //     duration: const Duration(seconds: 3)));
+        quizz?.value = quizFromJson(jsonEncode(result['data']));
+        update();
+      } else {
+        Get.showSnackbar(GetSnackBar(
+          backgroundColor: Colors.red,
+          message: result['message'],
+          duration: const Duration(seconds: 3),
+        ));
+      }
+    } catch (e) {
+      Get.showSnackbar(const GetSnackBar(
+        backgroundColor: Colors.red,
+        message: "hya Bigriyo hai",
+        duration: Duration(seconds: 3),
+      ));
+    }
+  }
+
+  Future<void> getLessonTracking() async {
+    try {
+      var url =
+          Uri.http(ipaddress, 'finalyearproject_api/getLessonTracking.php');
+      var response =
+          await http.post(url, body: {'token': prefs!.getString('token')});
+      var result = jsonDecode(response.body);
+      if (result['success']) {
+        // Get.showSnackbar(GetSnackBar(
+        //     backgroundColor: Colors.green,
+        //     message: result['message'],
+        //     duration: const Duration(seconds: 3)));
+        progressTracking?.value =
+            progressTrackingFromJson(jsonEncode(result['data']));
+        update();
+      } else {
+        Get.showSnackbar(GetSnackBar(
+          backgroundColor: Colors.red,
+          message: result['message'],
+          duration: const Duration(seconds: 3),
+        ));
+      }
+    } catch (e) {
+      Get.showSnackbar(const GetSnackBar(
+        backgroundColor: Colors.red,
+        message: "hya Bigriyo hai",
+        duration: Duration(seconds: 3),
+      ));
+    }
+  }
+
+  Future<void> addCOurseContent() async {
+    await getLessonTracking();
+
     courseContentCourseId?.value = homecontroller.courseContent!
         .where((courseContent) => courseContent.courseId == courses.courseId)
         .toList();
+    isCourseCompleted.value = allcontentswatched();
+  }
+
+  bool allcontentswatched() {
+    return courseContentCourseId?.value.every((courseContent) =>
+            progressTracking?.value.any(
+                (element) => element.lessonId == courseContent.contentId) ??
+            false) ??
+        false;
+  }
+
+  @override
+  Future<void> onInit() async {
+    prefs = await SharedPreferences.getInstance();
+
+    await getMarks();
+
+    await addCOurseContent();
     length = courseContentCourseId?.length ?? 0;
     initializeIsClicked(length);
     initializeIsPlayed(length);
-
-    touchtime = Timer.periodic(Duration(seconds: 3), (Timer t) {
+    touchtime = Timer.periodic(const Duration(seconds: 3), (Timer t) {
       istouched.value = false;
     });
     // print(courseContentCourseId);
     // print(homepageController.courseContent);
     // print(courses.courseId);
+
     super.onInit();
   }
 
@@ -197,14 +387,24 @@ class PaicourseContentController extends GetxController {
 
   RxBool istouched = false.obs;
   RxDouble opacity = 1.0.obs;
-  // void showandHideVideoIcon() {
-  //   print(istouched.value);
-  //   if (istouched.value == true) {
-  //     opacity.value = 1;
-  //   } else {
-  //     opacity.value = 0;
-  //   }
-  // }
+  Future<void> saveLastWatchedPosition() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(
+        '${courses.courseId}.lastWatchedPosition',
+        double.parse(
+            videoPlayerController.value.position.inSeconds.toString()));
+  }
+
+  Future<void> loadLastWatchedPosition() async {
+    final prefs = await SharedPreferences.getInstance();
+    final lastWatchedPosition =
+        prefs.getDouble('${courses.courseId}.lastWatchedPosition');
+    if (lastWatchedPosition != null) {
+      videoPlayerController
+          .seekTo(Duration(seconds: lastWatchedPosition.toInt()));
+    }
+  }
+
   void onScreenTouched() {
     // Set istouched to true and opacity to 1 when the screen is touched
     istouched.value = true;

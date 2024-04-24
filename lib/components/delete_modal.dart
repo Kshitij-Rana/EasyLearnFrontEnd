@@ -8,9 +8,12 @@ import 'package:sizer/sizer.dart';
 class DeleteModal extends StatelessWidget {
   final String question;
   final VoidCallback deleteFunction;
-
+  final bool isLogout;
   const DeleteModal(
-      {super.key, required this.question, required this.deleteFunction});
+      {super.key,
+      required this.question,
+      required this.deleteFunction,
+      this.isLogout = false});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class DeleteModal extends StatelessWidget {
             borderRadius: BorderRadius.circular(3.w),
           ),
           width: 90.w,
-          height: isTablet() ? 40.w : 28.w,
+          height: isLogout == true ? 28.w : 34.w,
           child: Padding(
             padding:
                 EdgeInsets.only(top: 4.w, bottom: 4.w, left: 5.w, right: 5.w),
@@ -33,7 +36,7 @@ class DeleteModal extends StatelessWidget {
                 Text(
                   question,
                   style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: isLogout == true ? 13.sp : 14.sp,
                       // fontFamily: Assets.jakartaFont,
                       fontWeight: FontWeight.w500),
                 ),
@@ -70,7 +73,7 @@ class DeleteModal extends StatelessWidget {
                           // Get.back();
                         },
                         child: Text(
-                          "Delete",
+                          isLogout == true ? "Log Out" : "Delete",
                           style: TextStyle(
                               color: Colors.red,
                               fontSize: 11.5.sp,

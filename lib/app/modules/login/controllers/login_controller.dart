@@ -80,17 +80,22 @@ class LoginController extends GetxController {
           if (response.body.isNotEmpty) {
             var result = jsonDecode(response.body);
             if (result['success']) {
+              Get.put(UserDetailController());
+
               await prefs!.setString('role', result['role']);
               await prefs!.setString('token', result['token']);
               await prefs!.setString('userId', result['user_id']);
-              print(result['user_id']);
-              Get.put(UserDetailController());
 
               if (result['role'] == 'admin') {
+                Get.put(UserDetailController());
                 Get.offAllNamed(Routes.ADMIN_MAIN);
-              } else {
-                await Get.put(UserDetailController().getPaidCourses());
+              } else if (result['role'] == 'user') {
+                await Get.find<UserDetailController>().getPaidCourses();
                 Get.offAllNamed(Routes.HOME);
+              } else if (result['role'] == 'mainadmin') {
+                Get.put(UserDetailController());
+                await Get.find<UserDetailController>().getPaidCourses();
+                Get.offAllNamed(Routes.MAIN_ADMINHOME);
               }
               Get.showSnackbar(GetSnackBar(
                 backgroundColor: Colors.green,
