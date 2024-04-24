@@ -49,7 +49,7 @@ class _Intropage5State extends State<Intropage5> {
                 onPressed: () {
                   Get.toNamed(Routes.LOGIN);
                 },
-                child: Text(
+                child: const Text(
                   "Log In",
                   style: TextStyle(color: Colors.white, fontSize: 19),
                 )),
@@ -57,6 +57,5 @@ class _Intropage5State extends State<Intropage5> {
         ],
       ),
     );
-    ;
   }
 }

@@ -2,7 +2,7 @@ import 'package:e_learn/app/customs/customTextField.dart';
 import 'package:e_learn/app/customs/custom_body.dart';
 import 'package:e_learn/app/customs/custom_button.dart';
 import 'package:e_learn/app/utils/colors.dart';
-import 'package:e_learn/constants.dart';
+import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -33,8 +33,10 @@ class SignupView extends GetView<SignupController> {
                           fontSize: 20.sp,
                           fontWeight: FontWeight.bold),
                     ),
+                    Gap(height: 4.w),
+
                     CustomTextField(
-                      hintText: "full name",
+                      hintText: "Full name",
                       controller: controller.nameController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -43,8 +45,10 @@ class SignupView extends GetView<SignupController> {
                         return null;
                       },
                     ),
+                    Gap(height: 4.w),
+
                     CustomTextField(
-                      hintText: "email",
+                      hintText: "Email",
                       controller: controller.emailController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -55,58 +59,61 @@ class SignupView extends GetView<SignupController> {
                         return null;
                       },
                     ),
+                    Gap(height: 4.w),
                     // CustomTextField(
                     //     hintText: "role",
                     //     controller: controller.roleController),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16, right: 16),
-                      child: DropdownButtonFormField(
-                        decoration: InputDecoration(
-                          hintText: "Role",
-                          labelText: "Role",
-                          labelStyle: TextStyle(
-                              color: Colors.black.withOpacity(0.6),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500),
-                          prefixIcon: Icon(Icons.person,
-                              color: Colors.black.withOpacity(0.75)),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(7),
-                              borderSide: BorderSide(
-                                  width: 2,
-                                  color: Colors.black.withOpacity(0.75))),
-                          disabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(7),
-                              borderSide: const BorderSide(
-                                  width: 2, color: Colors.grey)),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(7),
-                              borderSide: const BorderSide(
-                                  width: 2, color: Colors.black87)),
-                          errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(7),
-                              borderSide: const BorderSide(
-                                  width: 2, color: Colors.red)),
-                        ),
-                        items: const [
-                          DropdownMenuItem(
-                              value: "admin", child: Text("Admin")),
-                          DropdownMenuItem(value: "user", child: Text("User"))
-                        ],
-                        value: controller.dropDownValue_role,
-                        onChanged: (value) =>
-                            controller.dropDownValue_role = value as String,
-                        validator: (value) {
-                          if (value == null) {
-                            return "Select your role";
-                          }
-                          return null;
-                        },
+                    DropdownButtonFormField(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: "Role",
+                        labelStyle: TextStyle(
+                            color: Colors.black.withOpacity(0.5),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500),
+                        prefixIcon: Icon(Icons.person,
+                            color: Colors.black.withOpacity(0.5)),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(7),
+                            borderSide: BorderSide(
+                                width: 2,
+                                color: Colors.black.withOpacity(0.25))),
+                        disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(7),
+                            borderSide: const BorderSide(
+                                width: 2, color: Colors.white)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(7),
+                            borderSide: BorderSide(
+                                width: 2, color: Colors.grey.shade400)),
+                        errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(7),
+                            borderSide:
+                                const BorderSide(width: 2, color: Colors.red)),
                       ),
+                      items: const [
+                        DropdownMenuItem(value: "admin", child: Text("Admin")),
+                        DropdownMenuItem(value: "user", child: Text("User"))
+                      ],
+                      value: controller.dropDownValue_role,
+                      onChanged: (value) =>
+                          controller.dropDownValue_role = value as String,
+                      validator: (value) {
+                        if (value == null) {
+                          return "Select your role";
+                        }
+                        return null;
+                      },
+                      dropdownColor: Colors
+                          .white, // Set the dropdown background color to white
                     ),
+
+                    Gap(height: 4.w),
+
                     CustomTextField(
                       isPassword: true,
-                      hintText: "password",
+                      hintText: "Password",
                       controller: controller.passwordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -117,10 +124,12 @@ class SignupView extends GetView<SignupController> {
                         return null;
                       },
                     ),
+                    Gap(height: 4.w),
+
                     CustomTextField(
                       isPassword: true,
-                      hintText: "confirm password",
-                      controller: controller.passwordController,
+                      hintText: "Confirm Password",
+                      controller: controller.confirmPasswordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Please enter password";

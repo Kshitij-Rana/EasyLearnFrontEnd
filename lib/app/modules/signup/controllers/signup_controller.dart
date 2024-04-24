@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:e_learn/constants.dart';
+import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -17,20 +17,6 @@ class SignupController extends GetxController {
   //TODO: Implement SignupController
 
   final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   void signup() async {
     if (signUpKey.currentState!.validate()) {
@@ -58,7 +44,6 @@ class SignupController extends GetxController {
           ));
         }
       } catch (e) {
-        print("Caught exception: $e");
         Get.showSnackbar(const GetSnackBar(
           backgroundColor: Colors.red,
           message: "Error in data",

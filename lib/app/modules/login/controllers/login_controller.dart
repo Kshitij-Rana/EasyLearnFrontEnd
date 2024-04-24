@@ -1,7 +1,8 @@
 import 'dart:convert';
 
+import 'package:e_learn/app/controller/user_detail_controller.dart';
 import 'package:e_learn/app/routes/app_pages.dart';
-import 'package:e_learn/constants.dart';
+import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -19,16 +20,6 @@ class LoginController extends GetxController {
   void onInit() async {
     super.onInit();
     prefs = await SharedPreferences.getInstance();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   // Future<void> login() async {
@@ -81,26 +72,31 @@ class LoginController extends GetxController {
     if (loginKey.currentState!.validate()) {
       try {
         var url = Uri.http(ipaddress, 'finalyearproject_api/auth/login.php');
-        print(url);
         var response = await http.post(url, body: {
           'email': emailController.text,
           'password': passController.text
         });
-        print(response);
         if (response.statusCode == 200) {
           if (response.body.isNotEmpty) {
             var result = jsonDecode(response.body);
-            print(response.body);
             if (result['success']) {
+              Get.put(UserDetailController());
+
               await prefs!.setString('role', result['role']);
               await prefs!.setString('token', result['token']);
+              await prefs!.setString('userId', result['user_id']);
 
               if (result['role'] == 'admin') {
+                Get.put(UserDetailController());
                 Get.offAllNamed(Routes.ADMIN_MAIN);
-              } else {
+              } else if (result['role'] == 'user') {
+                await Get.find<UserDetailController>().getPaidCourses();
                 Get.offAllNamed(Routes.HOME);
+              } else if (result['role'] == 'mainadmin') {
+                Get.put(UserDetailController());
+                await Get.find<UserDetailController>().getPaidCourses();
+                Get.offAllNamed(Routes.MAIN_ADMINHOME);
               }
-
               Get.showSnackbar(GetSnackBar(
                 backgroundColor: Colors.green,
                 message: result['message'],
@@ -109,16 +105,16 @@ class LoginController extends GetxController {
             } else {
               Get.showSnackbar(GetSnackBar(
                 backgroundColor: Colors.red,
-                message: 'Something went wrong',
+                message: result['message'],
                 duration: const Duration(seconds: 3),
               ));
             }
           } else {
             // Handle empty response body
-            Get.showSnackbar(GetSnackBar(
+            Get.showSnackbar(const GetSnackBar(
               backgroundColor: Colors.red,
               message: 'Empty response body',
-              duration: const Duration(seconds: 3),
+              duration: Duration(seconds: 3),
             ));
           }
         } else {
@@ -131,7 +127,6 @@ class LoginController extends GetxController {
         }
       } catch (e) {
         // Handle exceptions (e.g., network issues)
-        print('Error: $e');
         Get.showSnackbar(GetSnackBar(
           backgroundColor: Colors.red,
           message: 'An error occurred: $e',

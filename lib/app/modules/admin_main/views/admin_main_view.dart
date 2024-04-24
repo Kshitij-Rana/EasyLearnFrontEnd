@@ -33,7 +33,7 @@ class _YourCustomBottomNavigationState extends State<YourCustomBottomNavigation>
     return ScaffoldGlobalBottomNavigation(
       listOfChild: const [
         AdminHomeView(),
-        AdminCategoryView(),
+        // AdminCategoryView(),
         AdminProductView(),
         ProfileView(),
       ],
@@ -57,21 +57,21 @@ class _YourCustomBottomNavigationState extends State<YourCustomBottomNavigation>
           color: Colors.white,
           vSync: this,
         ),
-        BottomNavigationItem(
-          activeIcon: Icon(
-            Icons.category_rounded,
-            color: bottomnavigationBarColor,
-            size: 23.sp,
-          ),
-          inActiveIcon: Icon(
-            Icons.category_outlined,
-            color: Colors.grey,
-            size: 20.sp,
-          ),
-          title: 'Search',
-          color: Colors.white,
-          vSync: this,
-        ),
+        // BottomNavigationItem(
+        //   activeIcon: Icon(
+        //     Icons.category_rounded,
+        //     color: bottomnavigationBarColor,
+        //     size: 23.sp,
+        //   ),
+        //   inActiveIcon: Icon(
+        //     Icons.category_outlined,
+        //     color: Colors.grey,
+        //     size: 20.sp,
+        //   ),
+        //   title: 'Category',
+        //   color: Colors.white,
+        //   vSync: this,
+        // ),
         BottomNavigationItem(
           activeIcon: Icon(
             Icons.menu_book_outlined,

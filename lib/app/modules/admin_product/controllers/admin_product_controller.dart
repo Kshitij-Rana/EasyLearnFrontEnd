@@ -4,27 +4,22 @@ import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminProductController extends GetxController {
-  //TODO: Implement AdminProductController
   final ImagePicker picker = ImagePicker();
   var imagebytes = Uint8List(0);
   final count = 0.obs;
+  late final SharedPreferences prefs;
+
   String videoURL = "";
   @override
-  void onInit() {
+  Future<void> onInit() async {
+    // TODO: implement onInit
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
+    prefs = await SharedPreferences.getInstance();
   }
 
   void uploadVideo() async {
@@ -38,7 +33,9 @@ class AdminProductController extends GetxController {
       videoURL = await videoRef.getDownloadURL();
       try {
         task;
-      } catch (e) {}
+      } catch (e) {
+        e;
+      }
       Get.showSnackbar(const GetSnackBar(
         message: "Image uploaded",
         backgroundColor: Colors.green,

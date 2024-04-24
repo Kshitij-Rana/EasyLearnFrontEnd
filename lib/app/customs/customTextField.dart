@@ -1,6 +1,6 @@
 import 'package:e_learn/app/utils/Assets.dart';
 import 'package:e_learn/app/utils/colors.dart';
-import 'package:e_learn/constants.dart';
+import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -50,15 +50,20 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.title ?? '',
-          style: TextStyle(
-            fontSize: isTablet() ? 10.sp : 13.sp,
-            fontWeight: FontWeight.w400,
-            color: primaryTextColor,
-          ),
+        Padding(
+          padding: EdgeInsets.only(left: 1.w),
+          child: widget.title == null
+              ? const SizedBox.shrink()
+              : Text(
+                  widget.title ?? '',
+                  style: TextStyle(
+                    fontSize: isTablet() ? 10.sp : 11.sp,
+                    fontWeight: FontWeight.w500,
+                    color: primaryTextColor.withOpacity(0.7),
+                  ),
+                ),
         ),
-        Gap(height: 1.h),
+        Gap(height: 1.w),
         TextFormField(
           onTapOutside: (event) {
             FocusScope.of(context).unfocus();
@@ -95,7 +100,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
               width: 0.3.w,
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withOpacity(0.7),
             )),
 
             errorStyle: TextStyle(

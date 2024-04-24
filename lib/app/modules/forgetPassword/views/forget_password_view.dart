@@ -1,7 +1,7 @@
 import 'package:e_learn/app/customs/customTextField.dart';
 import 'package:e_learn/app/customs/custom_body.dart';
 import 'package:e_learn/app/customs/custom_button.dart';
-import 'package:e_learn/constants.dart';
+import 'package:e_learn/components/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -19,31 +19,48 @@ class ForgetPasswordView extends GetView<ForgetPasswordController> {
       },
       child: Scaffold(
           appBar: AppBar(
-            title: Text("Forgot password"),
+            title: const Text("Forgot password"),
             centerTitle: true,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios_rounded),
+              icon: const Icon(Icons.arrow_back_ios_rounded),
               onPressed: () {
                 Get.back();
               },
             ),
           ),
           body: customBody(
-              child: Column(
-            children: [
-              Gap(height: 25.h),
-              CustomTextField(
+              child: Form(
+            key: controller.forgotPasswordKey,
+            child: Column(
+              children: [
+                Gap(height: 25.h),
+                CustomTextField(
                   hintText: "Enter your Email",
-                  controller: controller.forgotEmailController),
-              Gap(height: 3.h),
-              SizedBox(
-                width: 230.sp,
-                child: CustomButton(
-                  title: "Find your profile",
-                  onPressed: () {},
+                  controller: controller.forgotEmailController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please Enter your Email";
+                    } else if (!value.isEmail) {
+                      return "Enter a valid email";
+                    }
+                    return null;
+                  },
                 ),
-              )
-            ],
+                Gap(height: 3.h),
+                SizedBox(
+                  width: 230.sp,
+                  child: Obx(
+                    () => CustomButton(
+                      isLoading: controller.isLoading.value,
+                      title: "Find your profile",
+                      onPressed: () {
+                        controller.onFindProfileClicked();
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ),
           ))),
     );
   }
